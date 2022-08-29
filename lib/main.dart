@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:trainers_app/screens/messages/messages.dart';
+
 import 'package:trainers_app/screens/profile/profile.dart';
 import './screens/auth/auth.dart';
 import './screens/favorites/favorites.dart';
 import './screens/home_screen/home_screen.dart';
-import './screens/register/register.dart';
 
 void main() {
   runApp(const Trainers());
@@ -30,10 +30,9 @@ class Trainers extends StatelessWidget {
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         Auth.routeName: (context) => Auth(),
-        Register.routeName: (context) => Register(),
         Favorites.routeName: (context) => Favorites(),
-        Messages.routeName:(context) => Messages(),
-        Profile.routeName:(context) => Profile(),
+        Messages.routeName: (context) => Messages(),
+        Profile.routeName: (context) => Profile(),
       },
     );
   }
