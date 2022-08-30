@@ -38,6 +38,7 @@ class _AuthState extends State<Auth> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    String contrasena = '';
 
     return Scaffold(
       body: Stack(
@@ -91,8 +92,10 @@ class _AuthState extends State<Auth> {
                         validator: (value) {
                           if (value == null || value.isEmpty)
                             return 'Ingrese su contraseña';
-                          else
+                          else {
+                            contrasena = value;
                             return null;
+                          }
                         },
                       ),
                       if (_authMode == AuthMode.Login)
@@ -110,6 +113,11 @@ class _AuthState extends State<Auth> {
                           validator: (value) {
                             if (value == null || value.isEmpty)
                               return 'Ingrese la contraseña nuevamente';
+                            if (value != contrasena) {
+                              return 'Las contraseñas no coinciden';
+                            }
+
+                            return null;
                           },
                         ),
                       const SizedBox(
