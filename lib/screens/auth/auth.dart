@@ -13,6 +13,7 @@ class Auth extends StatefulWidget {
 
 class _AuthState extends State<Auth> {
   AuthMode _authMode = AuthMode.Login;
+  final _formKey = GlobalKey<FormState>();
 
   void _toggleAuthMode() {
     if (_authMode == AuthMode.Login) {
@@ -27,9 +28,11 @@ class _AuthState extends State<Auth> {
   }
 
   void _homeScreen(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(
-      HomeScreen.routeName,
-    );
+    if (_formKey.currentState!.validate()) {
+      Navigator.of(context).pushReplacementNamed(
+        HomeScreen.routeName,
+      );
+    }
   }
 
   @override
@@ -47,13 +50,14 @@ class _AuthState extends State<Auth> {
           Center(
             child: Card(
               child: Form(
+                key: _formKey,
                 child: Container(
                   constraints: const BoxConstraints(
                     minHeight: 320,
                   ),
                   padding: const EdgeInsets.all(16.0),
                   width: deviceSize.width * 0.75,
-                  height: 330,
+                  height: 391,
                   child: Column(
                     children: [
                       TextFormField(
@@ -62,6 +66,21 @@ class _AuthState extends State<Auth> {
                           suffixIcon: Icon(Icons.alternate_email),
                         ),
                         keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Debe ingresar un correo';
+                          }
+
+                          bool emailValid = RegExp(
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(value);
+
+                          if (!emailValid) {
+                            return 'Ingrese un correo válido';
+                          }
+
+                          return null;
+                        },
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
@@ -69,6 +88,12 @@ class _AuthState extends State<Auth> {
                           suffixIcon: Icon(Icons.key),
                         ),
                         obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty)
+                            return 'Ingrese su contraseña';
+                          else
+                            return null;
+                        },
                       ),
                       if (_authMode == AuthMode.Login)
                         const TextButton(
@@ -82,6 +107,10 @@ class _AuthState extends State<Auth> {
                             suffixIcon: Icon(Icons.key),
                           ),
                           obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'Ingrese la contraseña nuevamente';
+                          },
                         ),
                       const SizedBox(
                         height: 20,
