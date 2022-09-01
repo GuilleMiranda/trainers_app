@@ -19,10 +19,12 @@ class _AuthState extends State<Auth> {
     if (_authMode == AuthMode.Login) {
       setState(() {
         _authMode = AuthMode.Register;
+        _formKey.currentState!.reset();
       });
     } else {
       setState(() {
         _authMode = AuthMode.Login;
+        _formKey.currentState!.reset();
       });
     }
   }
