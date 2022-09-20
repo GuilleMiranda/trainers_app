@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trainers_app/screens/messages/messages.dart';
+import 'package:location/location.dart';
 
 import 'package:trainers_app/screens/profile/profile.dart';
 import './screens/auth/auth.dart';
@@ -13,7 +14,7 @@ void main() {
 class Trainers extends StatelessWidget {
   const Trainers({Key? key}) : super(key: key);
 
-  final bool isLogged = false;
+  final bool isLogged = true;
 
   @override
   Widget build(BuildContext context) {
