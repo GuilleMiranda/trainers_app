@@ -3,6 +3,7 @@ import 'package:trainers_app/screens/messages/messages.dart';
 import 'package:location/location.dart';
 
 import 'package:trainers_app/screens/profile/profile.dart';
+import 'package:trainers_app/screens/register/register.dart';
 import './screens/auth/auth.dart';
 import './screens/favorites/favorites.dart';
 import './screens/home_screen/home_screen.dart';
@@ -34,6 +35,7 @@ class Trainers extends StatelessWidget {
         Favorites.routeName: (context) => Favorites(),
         Messages.routeName: (context) => Messages(),
         Profile.routeName: (context) => Profile(),
+        Register.routeName: (context) => Register("abc@abc.com", "abc123")
       },
     );
   }

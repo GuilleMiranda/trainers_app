@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trainers_app/model/cliente.dart';
+import 'package:trainers_app/screens/register/register.dart';
 import 'package:trainers_app/services/services.dart';
 import '../home_screen/home_screen.dart';
 
@@ -35,17 +37,25 @@ class _AuthState extends State<Auth> {
   }
 
   void _authorize(BuildContext context) {
-    if (_formKey.currentState!.validate()) {
-      AuthService.authClient(_emailController.text, _passwordController.text)
-          .then((autenticado) {
-        if (autenticado) {
-          Navigator.of(context).pushReplacementNamed(
-            HomeScreen.routeName,
-          );
-        } else {
-          _formKey.currentState!.reset();
-        }
-      });
+    if (_authMode == AuthMode.Login) {
+      if (_formKey.currentState!.validate()) {
+        AuthService.authClient(_emailController.text, _passwordController.text)
+            .then((autenticado) {
+          if (autenticado) {
+            Navigator.of(context).pushReplacementNamed(
+              HomeScreen.routeName,
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Usuario y/o contraseña erróneos.'),
+              backgroundColor: Theme.of(context).errorColor,
+            ));
+            _formKey.currentState!.reset();
+          }
+        });
+      }
+    } else if (_authMode == AuthMode.Register) {
+      Navigator.of(context).pushNamed(Register.routeName);
     }
   }
 
@@ -108,9 +118,9 @@ class _AuthState extends State<Auth> {
                         controller: _passwordController,
                         obscureText: true,
                         validator: (value) {
-                          if (value == null || value.isEmpty)
+                          if (value == null || value.isEmpty) {
                             return 'Ingrese su contraseña';
-                          else {
+                          } else {
                             return null;
                           }
                         },
@@ -142,13 +152,15 @@ class _AuthState extends State<Auth> {
                       ),
                       ElevatedButton(
                         onPressed: () => _authorize(context),
-                        child: Text(
-                            '${_authMode == AuthMode.Login ? "Ingresar" : "Registrarse"}'),
+                        child: Text(_authMode == AuthMode.Login
+                            ? "Ingresar"
+                            : "Registrarse"),
                       ),
                       TextButton(
                         onPressed: _toggleAuthMode,
-                        child: Text(
-                            '${_authMode == AuthMode.Login ? "Todavía no tengo una cuenta" : "Ya tengo una cuenta"}'),
+                        child: Text(_authMode == AuthMode.Login
+                            ? "Todavía no tengo una cuenta"
+                            : "Ya tengo una cuenta"),
                       )
                     ],
                   ),
