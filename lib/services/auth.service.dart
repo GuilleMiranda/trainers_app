@@ -1,10 +1,7 @@
 import 'dart:convert';
-import 'dart:ffi';
-
-import 'package:trainers_app/constants/environment.dart';
-import 'package:trainers_app/model/entrenador.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:trainers_app/constants/environment.dart';
 
 class AuthService {
   static String uri = '${EnvironmentConstants.apiUrl}auth/';
@@ -12,7 +9,6 @@ class AuthService {
   static Future<bool> authClient(String username, String password) async {
 
     Map data = {'email': username, 'contrasena': password};
-    print(data);
     final body = json.encode(data);
 
     final response = await http.post(

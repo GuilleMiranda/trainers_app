@@ -38,7 +38,6 @@ class _AuthState extends State<Auth> {
     if (_formKey.currentState!.validate()) {
       AuthService.authClient(_emailController.text, _passwordController.text)
           .then((autenticado) {
-        print(autenticado);
         if (autenticado) {
           Navigator.of(context).pushReplacementNamed(
             HomeScreen.routeName,
