@@ -14,7 +14,7 @@ void main() {
 class Trainers extends StatelessWidget {
   const Trainers({Key? key}) : super(key: key);
 
-  final bool isLogged = true;
+  final bool isLogged = false;
 
   @override
   Widget build(BuildContext context) {

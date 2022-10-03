@@ -1,2 +1,3 @@
 /** exports */
-export './web_client.service.dart';
+export './trainer.service.dart';
+export './auth.service.dart';

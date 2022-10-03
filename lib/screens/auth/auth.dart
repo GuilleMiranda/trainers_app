@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:trainers_app/services/services.dart';
 import '../home_screen/home_screen.dart';
 
 enum AuthMode { Login, Register }
 
 class Auth extends StatefulWidget {
   static const routeName = '/auth';
+
   const Auth({super.key});
 
   @override
@@ -13,6 +15,9 @@ class Auth extends StatefulWidget {
 
 class _AuthState extends State<Auth> {
   AuthMode _authMode = AuthMode.Login;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   void _toggleAuthMode() {
@@ -29,19 +34,25 @@ class _AuthState extends State<Auth> {
     }
   }
 
-  void _homeScreen(BuildContext context) {
+  void _authorize(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      Navigator.of(context).pushReplacementNamed(
-        HomeScreen.routeName,
-      );
+      AuthService.authClient(_emailController.text, _passwordController.text)
+          .then((autenticado) {
+        print(autenticado);
+        if (autenticado) {
+          Navigator.of(context).pushReplacementNamed(
+            HomeScreen.routeName,
+          );
+        } else {
+          _formKey.currentState!.reset();
+        }
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    String contrasena = '';
-
     return Scaffold(
       body: Stack(
         children: [
@@ -52,6 +63,10 @@ class _AuthState extends State<Auth> {
           ),
           Center(
             child: Card(
+              elevation: 8.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
               child: Form(
                 key: _formKey,
                 child: Container(
@@ -68,6 +83,7 @@ class _AuthState extends State<Auth> {
                           labelText: 'Correo',
                           suffixIcon: Icon(Icons.alternate_email),
                         ),
+                        controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -90,12 +106,12 @@ class _AuthState extends State<Auth> {
                           labelText: 'Contraseña',
                           suffixIcon: Icon(Icons.key),
                         ),
+                        controller: _passwordController,
                         obscureText: true,
                         validator: (value) {
                           if (value == null || value.isEmpty)
                             return 'Ingrese su contraseña';
                           else {
-                            contrasena = value;
                             return null;
                           }
                         },
@@ -115,7 +131,7 @@ class _AuthState extends State<Auth> {
                           validator: (value) {
                             if (value == null || value.isEmpty)
                               return 'Ingrese la contraseña nuevamente';
-                            if (value != contrasena) {
+                            if (value != _passwordController.text) {
                               return 'Las contraseñas no coinciden';
                             }
 
@@ -126,7 +142,7 @@ class _AuthState extends State<Auth> {
                         height: 20,
                       ),
                       ElevatedButton(
-                        onPressed: () => _homeScreen(context),
+                        onPressed: () => _authorize(context),
                         child: Text(
                             '${_authMode == AuthMode.Login ? "Ingresar" : "Registrarse"}'),
                       ),
@@ -138,10 +154,6 @@ class _AuthState extends State<Auth> {
                     ],
                   ),
                 ),
-              ),
-              elevation: 8.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
               ),
             ),
           ),

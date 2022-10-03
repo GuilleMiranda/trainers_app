@@ -59,13 +59,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _location().then((value) => print(_locationData.latitude));
 
-    _futureEntrenadores = WebClient().fetchTrainers();
+    _futureEntrenadores =  TrainerService().fetchTrainers();
   }
 
 
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Trainers'),
