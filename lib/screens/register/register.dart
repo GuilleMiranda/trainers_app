@@ -13,25 +13,32 @@ class Register extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Form(
-          child: Container(
-            child: Column(
-              children: [
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Nombres'),
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Apellidos'),
-                ),
-                TextFormField(
-                  decoration:
-                      const InputDecoration(labelText: 'Nombre mostrado'),
-                ),
-                InputDatePickerFormField(
-                  firstDate: DateTime(1900, 1, 1),
-                  lastDate: DateTime.now(),
-                )
-              ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Form(
+            child: Container(
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Nombres'),
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Apellidos'),
+                  ),
+                  TextFormField(
+                    decoration:
+                        const InputDecoration(labelText: 'Nombre mostrado'),
+                  ),
+                  InputDatePickerFormField(
+                    firstDate: DateTime(1900, 1, 1),
+                    lastDate: DateTime.now(),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => true,
+                    child: const Text('Registrarse'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

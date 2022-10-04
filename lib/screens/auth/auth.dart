@@ -19,8 +19,28 @@ class _AuthState extends State<Auth> {
   AuthMode _authMode = AuthMode.Login;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).backgroundColor,
+            ),
+          ),
+          Center(
+            child: _authCard(context),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _toggleAuthMode() {
     if (_authMode == AuthMode.Login) {
@@ -105,13 +125,14 @@ class _AuthState extends State<Auth> {
     return null;
   }
 
-  Widget _contrasenaForm(String label, Function(String) validator) {
+  Widget _contrasenaForm(String label, Function(String) validator,
+      TextEditingController controller) {
     return TextFormField(
       decoration: InputDecoration(
         labelText: label,
         suffixIcon: const Icon(Icons.key),
       ),
-      controller: _passwordController,
+      controller: controller,
       obscureText: true,
       validator: (value) => validator(value as String),
     );
@@ -136,7 +157,11 @@ class _AuthState extends State<Auth> {
           child: Column(
             children: [
               _emailForm(),
-              _contrasenaForm('Contraseña', _contrasenaValidator),
+              _contrasenaForm(
+                'Contraseña',
+                _contrasenaValidator,
+                _passwordController,
+              ),
               if (_authMode == AuthMode.Login)
                 const TextButton(
                   onPressed: null,
@@ -146,6 +171,7 @@ class _AuthState extends State<Auth> {
                 _contrasenaForm(
                   'Confirmar contraseña',
                   _confirmarContrasenaValidator,
+                  _confirmPasswordController,
                 ),
               const SizedBox(
                 height: 20,
@@ -164,24 +190,6 @@ class _AuthState extends State<Auth> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).backgroundColor,
-            ),
-          ),
-          Center(
-            child: _authCard(context),
-          ),
-        ],
       ),
     );
   }
