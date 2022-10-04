@@ -37,8 +37,8 @@ class _AuthState extends State<Auth> {
   }
 
   void _authorize(BuildContext context) {
-    if (_authMode == AuthMode.Login) {
-      if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
+      if (_authMode == AuthMode.Login) {
         AuthService.authClient(_emailController.text, _passwordController.text)
             .then((autenticado) {
           if (autenticado) {
@@ -53,15 +53,123 @@ class _AuthState extends State<Auth> {
             _formKey.currentState!.reset();
           }
         });
+      } else if (_authMode == AuthMode.Register) {
+        Navigator.of(context).pushNamed(Register.routeName);
       }
-    } else if (_authMode == AuthMode.Register) {
-      Navigator.of(context).pushNamed(Register.routeName);
     }
+  }
+
+  String? _emailValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Debe ingresar un correo';
+    }
+    bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(value);
+
+    if (!emailValid) {
+      return 'Ingrese un correo válido';
+    }
+
+    return null;
+  }
+
+  Widget _emailForm() {
+    return TextFormField(
+      decoration: const InputDecoration(
+        labelText: 'Correo',
+        suffixIcon: Icon(Icons.alternate_email),
+      ),
+      controller: _emailController,
+      keyboardType: TextInputType.emailAddress,
+      validator: _emailValidator,
+    );
+  }
+
+  String? _contrasenaValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Ingrese su contraseña';
+    } else {
+      return null;
+    }
+  }
+
+  String? _confirmarContrasenaValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Ingrese la contraseña nuevamente';
+    }
+    if (value != _passwordController.text) {
+      return 'Las contraseñas no coinciden';
+    }
+
+    return null;
+  }
+
+  Widget _contrasenaForm(String label, Function(String) validator) {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: label,
+        suffixIcon: const Icon(Icons.key),
+      ),
+      controller: _passwordController,
+      obscureText: true,
+      validator: (value) => validator(value as String),
+    );
+  }
+
+  Widget _authCard(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
+    return Card(
+      elevation: 8.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Form(
+        key: _formKey,
+        child: Container(
+          constraints: const BoxConstraints(
+            minHeight: 320,
+          ),
+          padding: const EdgeInsets.all(16.0),
+          width: deviceSize.width * 0.75,
+          height: 391,
+          child: Column(
+            children: [
+              _emailForm(),
+              _contrasenaForm('Contraseña', _contrasenaValidator),
+              if (_authMode == AuthMode.Login)
+                const TextButton(
+                  onPressed: null,
+                  child: Text('¿Olvidaste tu contraseña?'),
+                ),
+              if (_authMode == AuthMode.Register)
+                _contrasenaForm(
+                  'Confirmar contraseña',
+                  _confirmarContrasenaValidator,
+                ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () => _authorize(context),
+                child: Text(
+                    _authMode == AuthMode.Login ? "Ingresar" : "Registrarse"),
+              ),
+              TextButton(
+                onPressed: _toggleAuthMode,
+                child: Text(_authMode == AuthMode.Login
+                    ? "Todavía no tengo una cuenta"
+                    : "Ya tengo una cuenta"),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
         children: [
@@ -71,102 +179,7 @@ class _AuthState extends State<Auth> {
             ),
           ),
           Center(
-            child: Card(
-              elevation: 8.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Form(
-                key: _formKey,
-                child: Container(
-                  constraints: const BoxConstraints(
-                    minHeight: 320,
-                  ),
-                  padding: const EdgeInsets.all(16.0),
-                  width: deviceSize.width * 0.75,
-                  height: 391,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Correo',
-                          suffixIcon: Icon(Icons.alternate_email),
-                        ),
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Debe ingresar un correo';
-                          }
-
-                          bool emailValid = RegExp(
-                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                              .hasMatch(value);
-
-                          if (!emailValid) {
-                            return 'Ingrese un correo válido';
-                          }
-
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Contraseña',
-                          suffixIcon: Icon(Icons.key),
-                        ),
-                        controller: _passwordController,
-                        obscureText: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Ingrese su contraseña';
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                      if (_authMode == AuthMode.Login)
-                        const TextButton(
-                          onPressed: null,
-                          child: Text('¿Olvidaste tu contraseña?'),
-                        ),
-                      if (_authMode == AuthMode.Register)
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            labelText: 'Confirmar contraseña',
-                            suffixIcon: Icon(Icons.key),
-                          ),
-                          obscureText: true,
-                          validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Ingrese la contraseña nuevamente';
-                            if (value != _passwordController.text) {
-                              return 'Las contraseñas no coinciden';
-                            }
-
-                            return null;
-                          },
-                        ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      ElevatedButton(
-                        onPressed: () => _authorize(context),
-                        child: Text(_authMode == AuthMode.Login
-                            ? "Ingresar"
-                            : "Registrarse"),
-                      ),
-                      TextButton(
-                        onPressed: _toggleAuthMode,
-                        child: Text(_authMode == AuthMode.Login
-                            ? "Todavía no tengo una cuenta"
-                            : "Ya tengo una cuenta"),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            child: _authCard(context),
           ),
         ],
       ),
