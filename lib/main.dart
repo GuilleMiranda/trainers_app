@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trainers_app/screens/messages/messages.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:location/location.dart';
 
 import 'package:trainers_app/screens/profile/profile.dart';
 import 'package:trainers_app/screens/register/register.dart';
-import 'package:trainers_app/screens/trainer_detail/trainer_detail.dart';
-import 'package:trainers_app/services/services.dart';
 import './screens/auth/auth.dart';
 import './screens/favorites/favorites.dart';
 import './screens/home_screen/home_screen.dart';
@@ -26,18 +24,18 @@ class Trainers extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RepositoryProvider(
-        create: (context) => AuthService(),
-        child: Auth(),
-      ),
+      home: isLogged
+          ? HomeScreen()
+          : Auth(
+              key: key,
+            ),
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         Auth.routeName: (context) => Auth(),
         Favorites.routeName: (context) => Favorites(),
         Messages.routeName: (context) => Messages(),
         Profile.routeName: (context) => Profile(),
-        Register.routeName: (context) => Register(),
-        TrainerDetail.routeName: (context) => TrainerDetail()
+        Register.routeName: (context) => Register("abc@abc.com", "abc123")
       },
     );
   }
