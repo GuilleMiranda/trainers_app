@@ -1,30 +1,22 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:trainers_app/model/entrenador.dart';
 
-class EntrenadorTile extends StatefulWidget {
+import '../trainer_detail/trainer_detail.dart';
+
+class TrainerTile extends StatefulWidget {
   final Entrenador entrenador;
 
-  const EntrenadorTile(this.entrenador, {Key? key}) : super(key: key);
+  const TrainerTile(this.entrenador, {Key? key}) : super(key: key);
 
   @override
-  State<EntrenadorTile> createState() => _EntrenadorTileState();
+  State<TrainerTile> createState() => _TrainerTileState();
 }
 
-class _EntrenadorTileState extends State<EntrenadorTile> {
-  bool expanded = false;
-
-  void _toggleExpanded(bool currentValue) {
-    setState(() {
-      expanded = currentValue;
-    });
-  }
+class _TrainerTileState extends State<TrainerTile> {
 
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      onExpansionChanged: _toggleExpanded,
       leading: Icon(
         Icons.account_circle,
         size: 48,
@@ -33,15 +25,6 @@ class _EntrenadorTileState extends State<EntrenadorTile> {
         widget.entrenador.nombreMostrado,
         style: Theme.of(context).textTheme.titleLarge,
       ),
-      trailing: expanded
-          ? Icon(
-              Icons.arrow_drop_up_outlined,
-              size: 36,
-            )
-          : Icon(
-              Icons.arrow_drop_down_outlined,
-              size: 36,
-            ),
       subtitle: Row(
         children: [
           Text(
@@ -56,7 +39,12 @@ class _EntrenadorTileState extends State<EntrenadorTile> {
       ),
       children: [
         Text('${widget.entrenador.experiencia} años de experiencia'),
+        TextButton(onPressed: _detalleEntrenador, child: Text("Ver más")),
       ],
     );
+  }
+
+  _detalleEntrenador() {
+    Navigator.of(context).pushNamed(TrainerDetail.routeName, arguments: widget.entrenador);
   }
 }
