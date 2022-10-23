@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
 import 'package:trainers_app/model/entrenador.dart';
-import 'package:trainers_app/screens/home_screen/entrenador_tile.dart';
+import 'package:trainers_app/screens/auth/auth.dart';
+import 'package:trainers_app/screens/home_screen/trainer_tile.dart';
 import '../favorites/favorites.dart';
 import '../profile/profile.dart';
 import '../messages/messages.dart';
@@ -54,6 +55,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _locationData = await location.getLocation();
   }
 
+  void _logout() {
+    Navigator.of(context).pushReplacementNamed(Auth.routeName);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -80,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? ListView.builder(
                         itemCount: snapshot.data?.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return EntrenadorTile(snapshot.data![index]);
+                          return TrainerTile(snapshot.data![index]);
                         })
                     : const Center(
                         child: CircularProgressIndicator(),
@@ -118,6 +123,12 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text('Perfil'),
             onTap: () => _profile(context),
           ),
+          SizedBox.expand(),
+          ListTile(
+            leading: Icon(Icons.logout, color: Theme.of(context).errorColor),
+            title: Text('Salir'),
+            onTap: _logout,
+          )
         ],
       ),
     );

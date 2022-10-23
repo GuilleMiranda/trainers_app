@@ -1,6 +1,8 @@
 import 'dart:ffi';
 
 class Entrenador {
+  final int id;
+  final String descripcion;
   final double calificacion;
   final int experiencia;
   final double latitud;
@@ -13,6 +15,8 @@ class Entrenador {
   final String fechaNacimiento;
 
   const Entrenador({
+    required this.id,
+    required this.descripcion,
     required this.calificacion,
     required this.experiencia,
     required this.latitud,
@@ -26,6 +30,8 @@ class Entrenador {
 
   factory Entrenador.fromJson(Map<String, dynamic> json) {
     return Entrenador(
+      id: json['id'],
+      descripcion: json['descripcion'],
       calificacion: json['calificacion'],
       experiencia: json['experiencia'],
       latitud: json['latitud'],
