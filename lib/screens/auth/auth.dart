@@ -71,7 +71,6 @@ class _AuthState extends State<Auth> {
               HomeScreen.routeName,
             );
           } else {
-            print("object");
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: const Text('Usuario y/o contraseña erróneos.'),
               backgroundColor: Theme.of(context).errorColor,

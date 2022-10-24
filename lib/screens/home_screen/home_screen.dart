@@ -64,14 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _location().then((value) => print(_locationData.latitude));
 
-    _futureEntrenadores =  TrainerService().fetchTrainers();
+    _futureEntrenadores = TrainerService().fetchTrainers();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Trainers'),
@@ -123,10 +120,13 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text('Perfil'),
             onTap: () => _profile(context),
           ),
-          SizedBox.expand(),
+          //SizedBox.expand(),
           ListTile(
             leading: Icon(Icons.logout, color: Theme.of(context).errorColor),
-            title: Text('Salir'),
+            title: Text(
+              'Salir',
+              style: TextStyle(color: Theme.of(context).errorColor),
+            ),
             onTap: _logout,
           )
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trainers_app/screens/chat/chat.dart';
 import 'package:trainers_app/screens/messages/messages.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,7 +38,8 @@ class Trainers extends StatelessWidget {
         Messages.routeName: (context) => Messages(),
         Profile.routeName: (context) => Profile(),
         Register.routeName: (context) => Register(),
-        TrainerDetail.routeName: (context) => TrainerDetail()
+        TrainerDetail.routeName: (context) => TrainerDetail(),
+        Chat.routeName: (context) => Chat()
       },
     );
   }
