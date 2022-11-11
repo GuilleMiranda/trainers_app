@@ -10,9 +10,9 @@ class TrainerDetail extends StatelessWidget {
 
   void _assignTrainer(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         backgroundColor: Colors.green,
-        content: Text('Encontraste a tu entrenador!'),
+        content: Text('¡Encontraste a tu entrenador!'),
       ),
     );
 
