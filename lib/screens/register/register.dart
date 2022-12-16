@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trainers_app/model/cliente.dart';
 import 'package:trainers_app/screens/auth/auth.dart';
+import 'package:trainers_app/screens/preferences_register/preferences.dart';
 
 class Register extends StatelessWidget {
   static const routeName = '/register';
@@ -13,6 +14,7 @@ class Register extends StatelessWidget {
   final TextEditingController _nombreMostradoController =
       TextEditingController();
   late DateTime _fechaNacimiento = DateTime.now();
+  late int sexoBiologico = 0;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -62,7 +64,7 @@ class Register extends StatelessWidget {
                         value: 3,
                       )
                     ],
-                    onChanged: (value) => print(value),
+                    onChanged: (value) => sexoBiologico = value as int,
                   ),
                   TextFormField(
                     decoration:
@@ -99,12 +101,10 @@ class Register extends StatelessWidget {
       cliente.fechaNacimiento = DateTime(
           _fechaNacimiento.year, _fechaNacimiento.month, _fechaNacimiento.day);
       cliente.activo = true;
+      cliente.sexoBiologico = sexoBiologico;
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        content: const Text('¡Te enviamos un correo!'),
-      ));
-      Navigator.of(context).pushReplacementNamed(Auth.routeName);
+      Navigator.of(context)
+          .pushReplacementNamed(Preferences.routeName, arguments: cliente);
     }
   }
 }

@@ -1,16 +1,20 @@
+import 'package:trainers_app/model/preferencias_cliente.dart';
+
 class Cliente {
   late bool activo;
   late String nombres;
   late String apellidos;
   late String nombreMostrado;
-  late String genero;
+  late int sexoBiologico;
 
   late DateTime fechaNacimiento;
   late String email;
   late String contrasena;
 
+  late PreferenciasCliente preferenciasCliente;
+
   Cliente(this.activo, this.nombres, this.apellidos, this.nombreMostrado,
-      this.genero, this.fechaNacimiento, this.email, this.contrasena);
+      this.sexoBiologico, this.fechaNacimiento, this.email, this.contrasena);
 
   Cliente.onRegister(this.email, this.contrasena);
 
@@ -19,9 +23,11 @@ class Cliente {
         contrasena = json['contrasena'],
         nombres = json['nombres'],
         apellidos = json['apellidos'],
-        genero = json['genero'],
+        sexoBiologico = json['genero'],
         nombreMostrado = json['nombreMostrado'],
-        fechaNacimiento = json['fechaNacimiento'];
+        fechaNacimiento = json['fechaNacimiento'],
+        preferenciasCliente =
+            PreferenciasCliente.fromJson(json['preferenciasCliente']);
 
   Map<String, dynamic> toJson() {
     return {
@@ -29,9 +35,10 @@ class Cliente {
       'contrasena': contrasena,
       'nombres': nombres,
       'apellidos': apellidos,
-      'genero': genero,
+      'genero': sexoBiologico,
       'nombreMostrado': nombreMostrado,
-      'fechaNacimiento': fechaNacimiento
+      'fechaNacimiento': fechaNacimiento,
+      'preferenciasCliente': preferenciasCliente.toJson()
     };
   }
 }

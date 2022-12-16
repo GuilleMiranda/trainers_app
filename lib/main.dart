@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trainers_app/screens/chat/chat.dart';
 import 'package:trainers_app/screens/messages/messages.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trainers_app/screens/preferences_register/preferences.dart';
 
 import 'package:trainers_app/screens/profile/profile.dart';
 import 'package:trainers_app/screens/register/register.dart';
@@ -39,7 +40,8 @@ class Trainers extends StatelessWidget {
         Profile.routeName: (context) => Profile(),
         Register.routeName: (context) => Register(),
         TrainerDetail.routeName: (context) => TrainerDetail(),
-        Chat.routeName: (context) => Chat()
+        Chat.routeName: (context) => Chat(),
+        Preferences.routeName: (context) => Preferences()
       },
     );
   }
