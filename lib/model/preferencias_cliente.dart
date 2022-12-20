@@ -5,24 +5,22 @@ class PreferenciasCliente {
   late int? modalidad; // Id que representa: Presencial - Virtual - Mixto
   late int?
       localizacionEntrenamiento; // Id lugar en el que quiere entrenar (gym, en casa, al aire libre, etc)
-  //late List<int> objetivos; // Id de lo que quiere lograr con el entrenamiento
+  late int objetivo; // Id de lo que quiere lograr con el entrenamiento
   late int? tipoPlan; // Id del plazo del servicio: mensual, por día
   late double?
       precioTope; // Monto máximo que quiere pagar para el plazo que eligió
   late int?
       condicionSalud; // Tiene alguna condición especial? Sí o No para no entrar en su vida personal
 
-  PreferenciasCliente(      ){
+  PreferenciasCliente() {
     deporte = -1;
     expecienciaEnDisciplina = -1;
     modalidad = -1;
     localizacionEntrenamiento = -1;
-    // objetivos = null;
+    objetivo = -1;
     tipoPlan = -1;
     precioTope = -1.0;
     condicionSalud = -1;
-
-
   }
 
   PreferenciasCliente.allArgs(
@@ -30,7 +28,7 @@ class PreferenciasCliente {
       this.expecienciaEnDisciplina,
       this.modalidad,
       this.localizacionEntrenamiento,
-      //this.objetivos,
+      this.objetivo,
       this.tipoPlan,
       this.precioTope,
       this.condicionSalud);
@@ -40,7 +38,7 @@ class PreferenciasCliente {
     expecienciaEnDisciplina = preferencias['experienciaEnDisciplina'];
     modalidad = preferencias['modalidad'];
     localizacionEntrenamiento = preferencias['localizacionEntrenamiento'];
-    //objetivos = preferencias['objetivos'];
+    objetivo = preferencias['objetivo'];
     tipoPlan = preferencias['tipoPlan'];
     precioTope = preferencias['precioTope'];
     condicionSalud = preferencias['condicionSalud'];
@@ -52,7 +50,7 @@ class PreferenciasCliente {
       'expecienciaEnDisciplina': expecienciaEnDisciplina,
       'modalidad': modalidad,
       'localizacionEntrenamiento': localizacionEntrenamiento,
-      //'objetivos': objetivos,
+      'objetivo': objetivo,
       'tipoPlan': tipoPlan,
       'precioTope': precioTope,
       'condicionSalud': condicionSalud
@@ -61,6 +59,10 @@ class PreferenciasCliente {
 
   dynamic getFromQuestion(String question) {
     switch (question) {
+      case 'OBJETIVO':
+        {
+          return objetivo;
+        }
       case 'DEPORTE':
         {
           return deporte;
@@ -94,6 +96,11 @@ class PreferenciasCliente {
 
   void setFromQuestion(String question, dynamic response) {
     switch (question) {
+      case 'OBJETIVO':
+        {
+          objetivo = response;
+        }
+        break;
       case 'DEPORTE':
         {
           deporte = response;

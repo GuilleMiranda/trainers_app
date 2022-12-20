@@ -3,6 +3,7 @@ import 'package:trainers_app/model/cliente.dart';
 import 'package:trainers_app/model/preferencias_cliente.dart';
 import 'package:trainers_app/screens/preferences_register/answer.dart';
 import 'package:trainers_app/screens/preferences_register/question.dart';
+import 'package:trainers_app/services/services.dart';
 
 class Preferences extends StatefulWidget {
   static const routeName = '/preferences_register';
@@ -14,19 +15,27 @@ class Preferences extends StatefulWidget {
 }
 
 class _PreferencesState extends State<Preferences> {
+  late Future<List<Map<String, dynamic>>> _questions;
   var _questionIndex = 0;
 
   late Cliente _cliente;
   PreferenciasCliente _preferenciasCliente = PreferenciasCliente();
 
+  @override
+  void initState() {
+    super.initState();
+
+    _questions = ClientService().fetchQuestions();
+  }
+
   void _answerQuestion(String question, dynamic response) {
     setState(() {
       _preferenciasCliente.setFromQuestion(question, response);
     });
-    print(_preferenciasCliente.toJson().toString());
+    print(_cliente.preferenciasCliente.toJson().toString());
   }
 
-  Widget _buildNavigationButtons() {
+  Widget _buildNavigationButtons(String? question, int? length) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -46,7 +55,21 @@ class _PreferencesState extends State<Preferences> {
         ),
         ElevatedButton(
           onPressed: () {
-            if (_questionIndex < questions.length - 1) {
+            var respuesta =
+                _cliente.preferenciasCliente.getFromQuestion(question!);
+
+            if (respuesta == -1) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('Elegí una opción antes de continuar.'),
+                  backgroundColor: Theme.of(context).errorColor,
+                  duration: const Duration(milliseconds: 750),
+                ),
+              );
+              return;
+            }
+
+            if (_questionIndex < length! - 1) {
               setState(() => _questionIndex++);
             } else {
               ScaffoldMessenger.of(context)
@@ -65,63 +88,144 @@ class _PreferencesState extends State<Preferences> {
     _cliente.preferenciasCliente = _preferenciasCliente;
 
     return Scaffold(
-      body: Column(
-        children: [
-          Question(questionText: questions[_questionIndex]['titulo']),
-          Answer(
-              question: questions[_questionIndex],
-              questionHandler: _answerQuestion,
-              preferences: _cliente.preferenciasCliente),
-          _buildNavigationButtons()
-        ],
+      body: FutureBuilder(
+        future: _questions,
+        builder: (BuildContext context,
+                AsyncSnapshot<List<Map<String, dynamic>>> snapshot) =>
+            snapshot.hasData
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).viewPadding.top + 4,
+                        ),
+                        Column(
+                          children: [
+                            Text('Contanos sobre vos',
+                                style: Theme.of(context).textTheme.titleLarge),
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                  'Contestá las siguientes preguntas y nosotros nos encargamos de encontrar al mejor profesional para vos.'),
+                            )
+                          ],
+                        ),
+                        Question(
+                            questionText: snapshot.data?[_questionIndex]
+                                ['titulo']),
+                        Answer(
+                            question: snapshot.data![_questionIndex],
+                            questionHandler: _answerQuestion,
+                            preferences: _cliente.preferenciasCliente),
+                        _buildNavigationButtons(
+                            snapshot.data![_questionIndex]['pregunta'],
+                            snapshot.data?.length)
+                      ],
+                    ),
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
       ),
     );
   }
-
-  final List<Map<String, dynamic>> questions = [
-    {
-      "pregunta": "DEPORTE",
-      "titulo": "¿Qué actividad deportiva querés hacer?",
-      "buscador": true,
-      "respuesta": {
-        "tipo": "RADIO_BUTTON",
-        "opciones": [
-          {"id": 0, "texto": "Natación"},
-          {"id": 1, "texto": "Gimnasia"},
-          {"id": 2, "texto": "Fútbol"},
-        ],
-        "slider": false,
-        "rango": null,
-      },
-    },
-    {
-      "pregunta": "EXPERIENCIA_DISCIPLINA",
-      "titulo": "¿Ya realizaste esta disciplina antes?",
-      "buscador": false,
-      "respuesta": {
-        "tipo": "RADIO_BUTTON",
-        "opciones": [
-          {"id": 0, "texto": "Nunca."},
-          {"id": 1, "texto": "Por menos de 1 año."},
-          {"id": 2, "texto": "Entre 1 ano y 5 año."},
-        ],
-        "slider": false,
-        "rango": null,
-      },
-    },
-    {
-      "pregunta": "PRECIO",
-      "titulo": "¿Cuánto querés pagar por un entrenador?",
-      "buscador": false,
-      "respuesta": {
-        "tipo": "COMBO_BOX",
-        "opciones": [
-          {"id": 0, "texto": "Diario"},
-          {"id": 1, "texto": "Mensual"}
-        ],
-        "slider": true,
-        "rango": {"min": 30000, "max": 300000},
-      },
-    }
-  ];
+//
+//
+// final List<Map<String, dynamic>> _questions = [
+//   {
+//     "pregunta": "OBJETIVO",
+//     "titulo": "¿Cuál es tu objetivo al entrenar?",
+//     "buscador": false,
+//     "respuesta": {
+//       "tipo": "RADIO_BUTTON",
+//       "opciones": [
+//         {"id": 0, "texto": "Perder o mantener peso."},
+//         {"id": 1, "texto": "Desarrollar la musculatura."},
+//         {"id": 2, "texto": "Aprender o mejorar en un deporte."},
+//         {"id": 3, "texto": "Llevar una vida saludable."},
+//         {"id": 4, "texto": "Recuperarme de una lesión."},
+//       ],
+//       "slider": false,
+//       "rango": null,
+//     },
+//   },
+//   {
+//     "pregunta": "DEPORTE",
+//     "titulo": "¿Qué actividad deportiva querés hacer?",
+//     "buscador": true,
+//     "respuesta": {
+//       "tipo": "RADIO_BUTTON",
+//       "opciones": [
+//         {"id": 0, "texto": "Natación"},
+//         {"id": 1, "texto": "Gimnasia"},
+//         {"id": 2, "texto": "Fútbol"},
+//       ],
+//       "slider": false,
+//       "rango": null,
+//     },
+//   },
+//   {
+//     "pregunta": "EXPERIENCIA_DISCIPLINA",
+//     "titulo": "¿Ya realizaste esta disciplina antes?",
+//     "buscador": false,
+//     "respuesta": {
+//       "tipo": "RADIO_BUTTON",
+//       "opciones": [
+//         {"id": 0, "texto": "Nunca."},
+//         {"id": 1, "texto": "Por menos de 1 año."},
+//         {"id": 2, "texto": "Entre 1 ano y 5 año."},
+//       ],
+//       "slider": false,
+//       "rango": null,
+//     },
+//   },
+//   {
+//     "pregunta": "MODALIDAD",
+//     "titulo": "¿En qué modaliadad te gustaría entrenar?",
+//     "buscador": false,
+//     "respuesta": {
+//       "tipo": "RADIO_BUTTON",
+//       "opciones": [
+//         {"id": 0, "texto": "Exclusivamente presencial."},
+//         {"id": 1, "texto": "Exclusivamente virtual."},
+//         {"id": 2, "texto": "Mixto."},
+//         {"id": 2, "texto": "No tengo preferencia."},
+//       ],
+//       "slider": false,
+//       "rango": null,
+//     },
+//   },
+//   {
+//     "pregunta": "LOCALIZACION",
+//     "titulo": "¿Dónde te gustaría entrenar?",
+//     "buscador": false,
+//     "respuesta": {
+//       "tipo": "RADIO_BUTTON",
+//       "opciones": [
+//         {"id": 0, "texto": "En un gimnasio."},
+//         {"id": 1, "texto": "Al aire libre."},
+//         {"id": 2, "texto": "En mi domicilio."},
+//         {"id": 3, "texto": "En un club/centro deportivo."},
+//         {"id": 4, "texto": "Mixto."},
+//         {"id": 5, "texto": "No tengo preferencia."},
+//       ],
+//       "slider": false,
+//       "rango": null,
+//     },
+//   },
+//   {
+//     "pregunta": "CONDICION_SALUD",
+//     "titulo": "¿Tenés alguna condición especial de salud?",
+//     "buscador": false,
+//     "respuesta": {
+//       "tipo": "RADIO_BUTTON",
+//       "opciones": [
+//         {"id": 0, "texto": "Sí."},
+//         {"id": 1, "texto": "No."},
+//       ],
+//       "slider": false,
+//       "rango": null,
+//     },
+//   },
+// ];
 }
