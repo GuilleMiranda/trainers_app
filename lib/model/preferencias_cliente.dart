@@ -7,8 +7,6 @@ class PreferenciasCliente {
       localizacionEntrenamiento; // Id lugar en el que quiere entrenar (gym, en casa, al aire libre, etc)
   late int objetivo; // Id de lo que quiere lograr con el entrenamiento
   late int? tipoPlan; // Id del plazo del servicio: mensual, por día
-  late double?
-      precioTope; // Monto máximo que quiere pagar para el plazo que eligió
   late int?
       condicionSalud; // Tiene alguna condición especial? Sí o No para no entrar en su vida personal
 
@@ -19,7 +17,6 @@ class PreferenciasCliente {
     localizacionEntrenamiento = -1;
     objetivo = -1;
     tipoPlan = -1;
-    precioTope = -1.0;
     condicionSalud = -1;
   }
 
@@ -30,7 +27,6 @@ class PreferenciasCliente {
       this.localizacionEntrenamiento,
       this.objetivo,
       this.tipoPlan,
-      this.precioTope,
       this.condicionSalud);
 
   PreferenciasCliente.fromJson(Map<String, dynamic> preferencias) {
@@ -40,7 +36,6 @@ class PreferenciasCliente {
     localizacionEntrenamiento = preferencias['localizacionEntrenamiento'];
     objetivo = preferencias['objetivo'];
     tipoPlan = preferencias['tipoPlan'];
-    precioTope = preferencias['precioTope'];
     condicionSalud = preferencias['condicionSalud'];
   }
 
@@ -52,7 +47,6 @@ class PreferenciasCliente {
       'localizacionEntrenamiento': localizacionEntrenamiento,
       'objetivo': objetivo,
       'tipoPlan': tipoPlan,
-      'precioTope': precioTope,
       'condicionSalud': condicionSalud
     };
   }
@@ -82,10 +76,6 @@ class PreferenciasCliente {
       case 'TIPO_PLAN':
         {
           return tipoPlan;
-        }
-      case 'PRECIO':
-        {
-          return precioTope;
         }
       case 'CONDICION_SALUD':
         {
@@ -124,11 +114,6 @@ class PreferenciasCliente {
       case 'TIPO_PLAN':
         {
           tipoPlan = response;
-        }
-        break;
-      case 'PRECIO':
-        {
-          precioTope = response;
         }
         break;
       case 'CONDICION_SALUD':

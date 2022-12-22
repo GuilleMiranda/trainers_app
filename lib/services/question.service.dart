@@ -4,11 +4,10 @@ import 'package:trainers_app/constants/environment.dart';
 
 import 'package:http/http.dart' as http;
 
-class ClientService {
-  final uri = '${EnvironmentConstants.apiUrl}cliente/';
+class QuestionService {
+  final uri = '${EnvironmentConstants.apiUrl}pregunta/';
 
   Future<List<Map<String, dynamic>>> fetchQuestions() async {
-    print('$uri${EnvironmentConstants.get_preguntas}');
     final response =
         await http.get(Uri.parse('$uri${EnvironmentConstants.get_preguntas}'));
     if (response.statusCode == 200) {
@@ -20,18 +19,16 @@ class ClientService {
               "buscador": question['buscador'],
               "respuesta": {
                 "tipo": question['respuesta']['tipo'],
-                "opciones": [ //TODO generar lista de la respuesta
-                  {"id": 0, "texto": "Perder o mantener peso."},
-                  {"id": 1, "texto": "Desarrollar la musculatura."},
-                  {"id": 2, "texto": "Aprender o mejorar en un deporte."},
-                  {"id": 3, "texto": "Llevar una vida saludable."},
-                  {"id": 4, "texto": "Recuperarme de una lesión."},
+                "opciones": [
+                  ...(question['respuesta']['opciones'] as List).map((opcion) {
+                    return {"id": opcion['id'], "texto": opcion['texto']};
+                  }).toList()
                 ],
                 "slider": question['respuesta']['slider'],
                 "rango": question['respuesta']['rango'],
               },
             },
-          ) //TODO crear model
+          )
           .toList());
     } else {
       throw Exception('Fallo al recuperar preguntas');

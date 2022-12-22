@@ -25,14 +25,13 @@ class _PreferencesState extends State<Preferences> {
   void initState() {
     super.initState();
 
-    _questions = ClientService().fetchQuestions();
+    _questions = QuestionService().fetchQuestions();
   }
 
   void _answerQuestion(String question, dynamic response) {
     setState(() {
       _preferenciasCliente.setFromQuestion(question, response);
     });
-    print(_cliente.preferenciasCliente.toJson().toString());
   }
 
   Widget _buildNavigationButtons(String? question, int? length) {
@@ -123,109 +122,11 @@ class _PreferencesState extends State<Preferences> {
                       ],
                     ),
                   )
-                : const Center(
+                : Center(
                     child: CircularProgressIndicator(),
-                  ),
+                    ),
       ),
     );
   }
-//
-//
-// final List<Map<String, dynamic>> _questions = [
-//   {
-//     "pregunta": "OBJETIVO",
-//     "titulo": "¿Cuál es tu objetivo al entrenar?",
-//     "buscador": false,
-//     "respuesta": {
-//       "tipo": "RADIO_BUTTON",
-//       "opciones": [
-//         {"id": 0, "texto": "Perder o mantener peso."},
-//         {"id": 1, "texto": "Desarrollar la musculatura."},
-//         {"id": 2, "texto": "Aprender o mejorar en un deporte."},
-//         {"id": 3, "texto": "Llevar una vida saludable."},
-//         {"id": 4, "texto": "Recuperarme de una lesión."},
-//       ],
-//       "slider": false,
-//       "rango": null,
-//     },
-//   },
-//   {
-//     "pregunta": "DEPORTE",
-//     "titulo": "¿Qué actividad deportiva querés hacer?",
-//     "buscador": true,
-//     "respuesta": {
-//       "tipo": "RADIO_BUTTON",
-//       "opciones": [
-//         {"id": 0, "texto": "Natación"},
-//         {"id": 1, "texto": "Gimnasia"},
-//         {"id": 2, "texto": "Fútbol"},
-//       ],
-//       "slider": false,
-//       "rango": null,
-//     },
-//   },
-//   {
-//     "pregunta": "EXPERIENCIA_DISCIPLINA",
-//     "titulo": "¿Ya realizaste esta disciplina antes?",
-//     "buscador": false,
-//     "respuesta": {
-//       "tipo": "RADIO_BUTTON",
-//       "opciones": [
-//         {"id": 0, "texto": "Nunca."},
-//         {"id": 1, "texto": "Por menos de 1 año."},
-//         {"id": 2, "texto": "Entre 1 ano y 5 año."},
-//       ],
-//       "slider": false,
-//       "rango": null,
-//     },
-//   },
-//   {
-//     "pregunta": "MODALIDAD",
-//     "titulo": "¿En qué modaliadad te gustaría entrenar?",
-//     "buscador": false,
-//     "respuesta": {
-//       "tipo": "RADIO_BUTTON",
-//       "opciones": [
-//         {"id": 0, "texto": "Exclusivamente presencial."},
-//         {"id": 1, "texto": "Exclusivamente virtual."},
-//         {"id": 2, "texto": "Mixto."},
-//         {"id": 2, "texto": "No tengo preferencia."},
-//       ],
-//       "slider": false,
-//       "rango": null,
-//     },
-//   },
-//   {
-//     "pregunta": "LOCALIZACION",
-//     "titulo": "¿Dónde te gustaría entrenar?",
-//     "buscador": false,
-//     "respuesta": {
-//       "tipo": "RADIO_BUTTON",
-//       "opciones": [
-//         {"id": 0, "texto": "En un gimnasio."},
-//         {"id": 1, "texto": "Al aire libre."},
-//         {"id": 2, "texto": "En mi domicilio."},
-//         {"id": 3, "texto": "En un club/centro deportivo."},
-//         {"id": 4, "texto": "Mixto."},
-//         {"id": 5, "texto": "No tengo preferencia."},
-//       ],
-//       "slider": false,
-//       "rango": null,
-//     },
-//   },
-//   {
-//     "pregunta": "CONDICION_SALUD",
-//     "titulo": "¿Tenés alguna condición especial de salud?",
-//     "buscador": false,
-//     "respuesta": {
-//       "tipo": "RADIO_BUTTON",
-//       "opciones": [
-//         {"id": 0, "texto": "Sí."},
-//         {"id": 1, "texto": "No."},
-//       ],
-//       "slider": false,
-//       "rango": null,
-//     },
-//   },
-// ];
+
 }
