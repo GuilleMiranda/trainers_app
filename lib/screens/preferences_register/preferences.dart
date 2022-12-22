@@ -122,11 +122,10 @@ class _PreferencesState extends State<Preferences> {
                       ],
                     ),
                   )
-                : Center(
+                : const Center(
                     child: CircularProgressIndicator(),
-                    ),
+                  ),
       ),
     );
   }
-
 }
