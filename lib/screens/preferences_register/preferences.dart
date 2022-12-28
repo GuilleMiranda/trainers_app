@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trainers_app/model/cliente.dart';
-import 'package:trainers_app/model/preferencia_cliente.dart';
+import 'package:trainers_app/screens/auth/auth.dart';
 import 'package:trainers_app/screens/preferences_register/answer.dart';
 import 'package:trainers_app/screens/preferences_register/question.dart';
 import 'package:trainers_app/services/services.dart';
@@ -69,7 +69,18 @@ class _PreferencesState extends State<Preferences> {
             if (_questionIndex < length! - 1) {
               setState(() => _questionIndex++);
             } else {
-              ClientService.postClient(_cliente).then((value) => null);
+              ClientService.postClient(_cliente).then((value) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    backgroundColor: Color.fromRGBO(75, 181, 67, 100),
+                    content: Text('¡Ya te registraste!')));
+                {
+                  Navigator.of(context).pushReplacementNamed(Auth.routeName);
+                }
+              }).onError((error, stackTrace) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Theme.of(context).errorColor,
+                    content: const Text('Algo salió mal.')));
+              });
             }
           },
           child: const Text('Siguiente'),
