@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trainers_app/model/cliente.dart';
 import 'package:trainers_app/screens/auth/auth_bloc.dart';
@@ -62,7 +63,6 @@ class _AuthState extends State<Auth> {
 
   void _authorize(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-
       if (_authMode == AuthMode.Login) {
         AuthService.authClient(_emailController.text, _passwordController.text)
             .then((autenticado) {
@@ -79,9 +79,22 @@ class _AuthState extends State<Auth> {
           }
         });
       } else if (_authMode == AuthMode.Register) {
-        Navigator.of(context).pushNamed(Register.routeName,
-            arguments: Cliente.onRegister(
-                _emailController.text, _passwordController.text));
+        AuthService.validateEmail(_emailController.text).then((value) {
+          if (value) {
+            Navigator.of(context).pushNamed(Register.routeName,
+                arguments: Cliente.onRegister(
+                    _emailController.text, _passwordController.text));
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Theme.of(context).errorColor,
+                content: const Text(
+                    'El correo ya está registrado. Intentá cambiar la contraseña.')));
+          }
+        }).onError((error, stackTrace) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Theme.of(context).errorColor,
+              content: const Text('Algo salió mal.')));
+        });
       }
     }
   }

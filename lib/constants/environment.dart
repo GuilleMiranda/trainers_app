@@ -5,4 +5,5 @@ abstract class EnvironmentConstants {
   static const String post_autenticar_cliente = 'autenticar/cliente';
   static const String get_preguntas = 'preguntas';
   static const String post_cliente = 'cliente';
+  static const String post_validar_email = 'validar/email';
 }
