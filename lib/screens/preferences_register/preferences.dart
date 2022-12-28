@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trainers_app/model/cliente.dart';
-import 'package:trainers_app/model/preferencias_cliente.dart';
+import 'package:trainers_app/model/preferencia_cliente.dart';
 import 'package:trainers_app/screens/preferences_register/answer.dart';
 import 'package:trainers_app/screens/preferences_register/question.dart';
 import 'package:trainers_app/services/services.dart';
@@ -19,7 +19,6 @@ class _PreferencesState extends State<Preferences> {
   var _questionIndex = 0;
 
   late Cliente _cliente;
-  PreferenciasCliente _preferenciasCliente = PreferenciasCliente();
 
   @override
   void initState() {
@@ -30,7 +29,7 @@ class _PreferencesState extends State<Preferences> {
 
   void _answerQuestion(String question, dynamic response) {
     setState(() {
-      _preferenciasCliente.setFromQuestion(question, response);
+      _cliente.setPreferencia(question, response);
     });
   }
 
@@ -54,10 +53,9 @@ class _PreferencesState extends State<Preferences> {
         ),
         ElevatedButton(
           onPressed: () {
-            var respuesta =
-                _cliente.preferenciasCliente.getFromQuestion(question!);
+            var respuesta = _cliente.getPreferencia(question!)?.valor;
 
-            if (respuesta == -1) {
+            if (respuesta == null || respuesta == -1) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text('Elegí una opción antes de continuar.'),
@@ -71,8 +69,7 @@ class _PreferencesState extends State<Preferences> {
             if (_questionIndex < length! - 1) {
               setState(() => _questionIndex++);
             } else {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(const SnackBar(content: Text('Done')));
+              ClientService.postClient(_cliente).then((value) => null);
             }
           },
           child: const Text('Siguiente'),
@@ -84,7 +81,6 @@ class _PreferencesState extends State<Preferences> {
   @override
   Widget build(BuildContext context) {
     _cliente = ModalRoute.of(context)!.settings.arguments as Cliente;
-    _cliente.preferenciasCliente = _preferenciasCliente;
 
     return Scaffold(
       body: FutureBuilder(
@@ -115,7 +111,7 @@ class _PreferencesState extends State<Preferences> {
                         Answer(
                             question: snapshot.data![_questionIndex],
                             questionHandler: _answerQuestion,
-                            preferences: _cliente.preferenciasCliente),
+                            client: _cliente),
                         _buildNavigationButtons(
                             snapshot.data![_questionIndex]['pregunta'],
                             snapshot.data?.length)

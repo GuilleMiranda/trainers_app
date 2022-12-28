@@ -1,18 +1,18 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import '../../model/preferencias_cliente.dart';
+import '../../model/cliente.dart';
 
 class Answer extends StatefulWidget {
   final Map<String, dynamic> question;
   final Function(String, dynamic) questionHandler;
-  final PreferenciasCliente preferences;
+  final Cliente client;
 
   Answer(
       {Key? key,
       required this.question,
       required this.questionHandler,
-      required this.preferences})
+      required this.client})
       : super(key: key);
 
   @override
@@ -21,13 +21,11 @@ class Answer extends StatefulWidget {
 
 class _AnswerState extends State<Answer> {
   dynamic _currentValue;
-  dynamic _plan;
 
   @override
   Widget build(BuildContext context) {
     _currentValue =
-        widget.preferences.getFromQuestion(widget.question['pregunta']);
-    _plan = widget.preferences.tipoPlan;
+        widget.client.getPreferencia(widget.question['pregunta'])?.valor;
 
     return Column(
       children: [
@@ -81,7 +79,6 @@ class _AnswerState extends State<Answer> {
                       ))
                   .toList(),
               onChanged: (plan) {
-                _plan = plan;
                 widget.questionHandler('TIPO_PLAN', plan);
               },
             ),
@@ -91,12 +88,12 @@ class _AnswerState extends State<Answer> {
             dynamic min = respuesta['rango']['min'];
             dynamic max = respuesta['rango']['max'];
 
-            if (_currentValue < min || _currentValue > max ) {
+            if (_currentValue < min || _currentValue > max) {
               _currentValue = double.parse(min.toString());
             }
 
             widgets.add(Slider(
-              label: 'PYG ${(_currentValue as double).roundToDouble()}' ,
+              label: 'PYG ${(_currentValue as double).roundToDouble()}',
               value: (_currentValue as double).roundToDouble(),
               min: double.parse(min.toString()),
               max: double.parse(max.toString()),
