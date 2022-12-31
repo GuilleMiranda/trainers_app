@@ -38,6 +38,7 @@ dependencies:
   intl: ^0.18.0
   location: ^4.2.0
   provider: ^6.0.5
+  recase: ^4.1.0
 
 dev_dependencies:
   flutter_test:

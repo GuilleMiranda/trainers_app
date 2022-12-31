@@ -1,5 +1,5 @@
 abstract class EnvironmentConstants {
-  static const String apiUrl = 'http://192.168.133.19:8080/api/v1/';
+  static const String apiUrl = 'http://192.168.0.15:8080/api/v1/';
   static const String get_entrenador = 'entrenador';
   static const String get_candidatos = 'candidatos';
   static const String get_entrenadores = 'entrenadores';

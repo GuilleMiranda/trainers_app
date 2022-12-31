@@ -103,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Theme.of(context).primaryColor,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Text(
@@ -110,11 +111,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: Theme.of(context).primaryTextTheme.titleLarge,
                   ),
                 ),
-                Row(
-                  children: [
-                    Icon(Icons.account_circle),
-                    Text('${session.client?.nombreMostrado}')
-                  ],
+                Text(
+                  'Hola ${session.client?.nombreMostrado}',
+                  style: Theme.of(context).primaryTextTheme.titleMedium,
                 )
               ],
             ),

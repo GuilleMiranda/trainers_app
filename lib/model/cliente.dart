@@ -34,10 +34,10 @@ class Cliente extends ChangeNotifier {
         fechaNacimiento =
             DateFormat('dd/MM/yyyy').parse(json['fechaNacimiento']),
         preferenciasCliente = <PreferenciaCliente>[
-              ...(json['preferencias'] as List)
-                  .map((e) => PreferenciaCliente(e['preferencia'], e['valor']))
-                  .toList()
-            ];
+          ...(json['preferencias'] as List)
+              .map((e) => PreferenciaCliente(e['preferencia'], e['valor']))
+              .toList()
+        ];
 
   Map<String, dynamic> toJson() {
     return {
@@ -76,6 +76,31 @@ class Cliente extends ChangeNotifier {
 
     if (!hasPreference) {
       preferenciasCliente.add(PreferenciaCliente(preference, value));
+    }
+  }
+
+  String getSexoBiologico() {
+    switch (sexoBiologico) {
+      case 0:
+        {
+          return 'Femenino';
+        }
+      case 1:
+        {
+          return 'Masculino';
+        }
+      case 2:
+        {
+          return 'Otros';
+        }
+      case 3:
+        {
+          return 'Prefiero no decirlo';
+        }
+      default:
+        {
+          return 'N/E';
+        }
     }
   }
 }
