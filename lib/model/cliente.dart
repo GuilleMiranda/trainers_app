@@ -24,8 +24,21 @@ class Cliente extends ChangeNotifier {
     preferenciasCliente = [];
   }
 
+  Cliente.copyOf(Cliente cliente) {
+    this.activo = true;
+    this.nombres = cliente.nombres;
+    this.apellidos = cliente.apellidos;
+    this.nombreMostrado = cliente.nombreMostrado;
+    this.sexoBiologico = cliente.sexoBiologico;
+    this.fechaNacimiento = cliente.fechaNacimiento;
+    this.email = cliente.email;
+    this.contrasena = cliente.contrasena;
+    this.preferenciasCliente = List.of(cliente.preferenciasCliente);
+  }
+
   Cliente.fromJson(Map<String, dynamic> json)
-      : email = json['email'],
+      : activo = true,
+        email = json['email'],
         contrasena = json['contrasena'] ?? '',
         nombres = json['nombres'],
         apellidos = json['apellidos'],

@@ -34,4 +34,25 @@ class QuestionService {
       throw Exception('Fallo al recuperar preguntas');
     }
   }
+
+  Future<List<Map<String, dynamic>>> fetchPreferences() async {
+    final response = await http
+        .get(Uri.parse('$uri${EnvironmentConstants.get_preferencias}'));
+    if (response.statusCode == 200) {
+      return ((json.decode(response.body) as List)
+          .map(
+            (preference) => {
+              "preferencia": preference['preferencia'],
+              "opciones": [
+                ...(preference['opciones'] as List).map((opcion) {
+                  return {"id": opcion['id'], "texto": opcion['texto']};
+                }).toList()
+              ]
+            },
+          )
+          .toList());
+    } else {
+      throw Exception('Fallo al recuperar preferencias');
+    }
+  }
 }

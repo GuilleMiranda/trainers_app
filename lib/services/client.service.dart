@@ -21,13 +21,24 @@ class ClientService {
   }
 
   static Future<Cliente?> getClient(int id) async {
-    final response =
-        await http.get(Uri.parse('$uri${EnvironmentConstants.get_cliente}/$id'));
+    final response = await http
+        .get(Uri.parse('$uri${EnvironmentConstants.get_cliente}/$id'));
 
     if (response.body.isNotEmpty) {
-      print(jsonDecode(response.body));
       return Cliente.fromJson(jsonDecode(response.body));
     }
     return null;
+  }
+
+  static Future<void> putClient(Cliente cliente) async {
+    final response =
+        await http.put(Uri.parse('$uri${EnvironmentConstants.put_cliente}'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(cliente.toJson()));
+    if (response.statusCode != 200) {
+      print(response.body);
+    }
   }
 }

@@ -5,16 +5,16 @@ import 'package:trainers_app/screens/preferences_register/answer.dart';
 import 'package:trainers_app/screens/preferences_register/question.dart';
 import 'package:trainers_app/services/services.dart';
 
-class Preferences extends StatefulWidget {
+class PreferencesRegister extends StatefulWidget {
   static const routeName = '/preferences_register';
 
-  const Preferences({Key? key}) : super(key: key);
+  const PreferencesRegister({Key? key}) : super(key: key);
 
   @override
-  State<Preferences> createState() => _PreferencesState();
+  State<PreferencesRegister> createState() => _PreferencesRegisterState();
 }
 
-class _PreferencesState extends State<Preferences> {
+class _PreferencesRegisterState extends State<PreferencesRegister> {
   late Future<List<Map<String, dynamic>>> _questions;
   var _questionIndex = 0;
 

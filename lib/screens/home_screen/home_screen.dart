@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
+import 'package:recase/recase.dart';
 import 'package:trainers_app/model/entrenador.dart';
 import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/auth/auth.dart';
@@ -26,39 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late bool _isServiceEnabled;
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
-
-  void _favorites(BuildContext context) {
-    Navigator.of(context).pushNamed(Favorites.routeName);
-  }
-
-  void _messages(BuildContext context) {
-    Navigator.of(context).pushNamed(Messages.routeName);
-  }
-
-  void _profile(BuildContext context) {
-    Navigator.of(context).pushNamed(Profile.routeName);
-  }
-
-  Future<void> _location() async {
-    _isServiceEnabled = await location.serviceEnabled();
-    if (!_isServiceEnabled) {
-      _isServiceEnabled = await location.requestService();
-      if (!_isServiceEnabled) return;
-    }
-
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) return;
-    }
-
-    _locationData = await location.getLocation();
-  }
-
-  void _logout() {
-    Provider.of<Session>(context, listen: false).remove();
-    Navigator.of(context).pushReplacementNamed(Auth.routeName);
-  }
 
   @override
   void initState() {
@@ -112,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Text(
-                  'Hola ${session.client?.nombreMostrado}',
+                  'Hola ${session.client?.nombreMostrado.titleCase}',
                   style: Theme.of(context).primaryTextTheme.titleMedium,
                 )
               ],
@@ -144,5 +112,38 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  void _favorites(BuildContext context) {
+    Navigator.of(context).pushNamed(Favorites.routeName);
+  }
+
+  void _messages(BuildContext context) {
+    Navigator.of(context).pushNamed(Messages.routeName);
+  }
+
+  void _profile(BuildContext context) {
+    Navigator.of(context).pushNamed(Profile.routeName);
+  }
+
+  Future<void> _location() async {
+    _isServiceEnabled = await location.serviceEnabled();
+    if (!_isServiceEnabled) {
+      _isServiceEnabled = await location.requestService();
+      if (!_isServiceEnabled) return;
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) return;
+    }
+
+    _locationData = await location.getLocation();
+  }
+
+  void _logout() {
+    Provider.of<Session>(context, listen: false).remove();
+    Navigator.of(context).pushReplacementNamed(Auth.routeName);
   }
 }

@@ -67,7 +67,7 @@ class _AuthState extends State<Auth> {
             .then((id) {
           if (id != -1) {
             ClientService.getClient(id).then((client) => {
-                  Provider.of<Session>(context, listen: false).add(client!),
+                  Provider.of<Session>(context, listen: false).update(client!),
                   Navigator.of(context)
                       .pushReplacementNamed(HomeScreen.routeName)
                 });

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/chat/chat.dart';
 import 'package:trainers_app/screens/messages/messages.dart';
+import 'package:trainers_app/screens/preferences_client/preferences.dart';
 import 'package:trainers_app/screens/preferences_register/preferences.dart';
 
 import 'package:trainers_app/screens/profile/profile.dart';
@@ -41,7 +42,8 @@ class Trainers extends StatelessWidget {
         Register.routeName: (context) => Register(),
         TrainerDetail.routeName: (context) => TrainerDetail(),
         Chat.routeName: (context) => Chat(),
-        Preferences.routeName: (context) => Preferences()
+        PreferencesRegister.routeName: (context) => PreferencesRegister(),
+        PreferencesClient.routeName: (context) => PreferencesClient()
       },
     );
   }

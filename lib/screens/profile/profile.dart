@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 import 'package:trainers_app/model/session.dart';
+import 'package:trainers_app/screens/preferences_client/preferences.dart';
+import 'package:trainers_app/services/services.dart';
 
 class Profile extends StatelessWidget {
   static const routeName = '/profile';
 
   const Profile({super.key});
-
-  final _clientDataLength = 4;
 
   List<ListTile> _clientData(Session session) {
     var dataList = <ListTile>[
@@ -39,6 +39,11 @@ class Profile extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Perfil'),
+        actions: [
+          IconButton(
+              onPressed: () => _clientePreferences(context),
+              icon: const Icon(Icons.settings))
+        ],
       ),
       body: _buildCard(context),
     );
@@ -57,7 +62,8 @@ class Profile extends StatelessWidget {
                       const CircleAvatar(
                         minRadius: 100,
                         backgroundImage: NetworkImage(
-                            'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'),
+                          'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+                        ),
                       ),
                       Text(
                         '${session.client?.nombreMostrado}'.titleCase,
@@ -71,19 +77,17 @@ class Profile extends StatelessWidget {
               Center(
                 child: TextButton(
                   onPressed: null,
-                  child: Text('Mis preferencias'),
-                ),
-              ),
-              Center(
-                child: TextButton(
-                  onPressed: null,
                   child: Text('Cambiar contraseña'),
                 ),
-              )
+              ),
             ],
           ),
         );
       },
     );
+  }
+
+  void _clientePreferences(BuildContext context) {
+    Navigator.of(context).pushNamed(PreferencesClient.routeName);
   }
 }
