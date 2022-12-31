@@ -19,4 +19,15 @@ class ClientService {
       print(response.body);
     }
   }
+
+  static Future<Cliente?> getClient(int id) async {
+    final response =
+        await http.get(Uri.parse('$uri${EnvironmentConstants.get_cliente}/$id'));
+
+    if (response.body.isNotEmpty) {
+      print(jsonDecode(response.body));
+      return Cliente.fromJson(jsonDecode(response.body));
+    }
+    return null;
+  }
 }

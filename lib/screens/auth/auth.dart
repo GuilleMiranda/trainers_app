@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:trainers_app/model/cliente.dart';
-import 'package:trainers_app/screens/auth/auth_bloc.dart';
+import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/register/register.dart';
 import 'package:trainers_app/services/services.dart';
 
@@ -39,8 +39,7 @@ class _AuthState extends State<Auth> {
             ),
           ),
           Center(
-            child: BlocProvider<AuthBloc>(
-                create: (context) => AuthBloc(), child: _authCard(context)),
+            child: _authCard(context),
           ),
         ],
       ),
@@ -65,12 +64,15 @@ class _AuthState extends State<Auth> {
     if (_formKey.currentState!.validate()) {
       if (_authMode == AuthMode.Login) {
         AuthService.authClient(_emailController.text, _passwordController.text)
-            .then((autenticado) {
-          if (autenticado) {
-            Navigator.of(context).pushReplacementNamed(
-              HomeScreen.routeName,
-            );
+            .then((id) {
+          if (id != -1) {
+            ClientService.getClient(id).then((client) => {
+                  Provider.of<Session>(context, listen: false).add(client!),
+                  Navigator.of(context)
+                      .pushReplacementNamed(HomeScreen.routeName)
+                });
           } else {
+            Provider.of<Session>(context, listen: false).remove();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: const Text('Usuario y/o contraseña erróneos.'),
               backgroundColor: Theme.of(context).errorColor,

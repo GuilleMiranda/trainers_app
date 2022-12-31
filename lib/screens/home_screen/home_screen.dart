@@ -1,15 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-
+import 'package:provider/provider.dart';
 import 'package:trainers_app/model/entrenador.dart';
+import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/auth/auth.dart';
 import 'package:trainers_app/screens/home_screen/trainer_tile.dart';
-import '../favorites/favorites.dart';
-import '../profile/profile.dart';
-import '../messages/messages.dart';
 
 import '../../services/services.dart';
+import '../favorites/favorites.dart';
+import '../messages/messages.dart';
+import '../profile/profile.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/homescreen';
@@ -56,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _logout() {
+    Provider.of<Session>(context, listen: false).remove();
     Navigator.of(context).pushReplacementNamed(Auth.routeName);
   }
 
@@ -64,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _location().then((value) => print(_locationData.latitude));
 
-    _futureEntrenadores = TrainerService().fetchTrainers();
+    _futureEntrenadores = TrainerService().fetchCandidates();
   }
 
   @override
@@ -73,7 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text('Trainers'),
       ),
-      drawer: buildDrawer(context),
+      drawer: Consumer<Session>(
+          builder: (context, session, child) => buildDrawer(context, session)),
       body: FutureBuilder(
         future: _futureEntrenadores,
         builder:
@@ -91,36 +93,47 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Drawer buildDrawer(BuildContext context) {
+  Drawer buildDrawer(BuildContext context, Session session) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text(
-              'Menú',
-              style: Theme.of(context).primaryTextTheme.titleLarge,
-            ),
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
             ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Menú',
+                    style: Theme.of(context).primaryTextTheme.titleLarge,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.account_circle),
+                    Text('${session.client?.nombreMostrado}')
+                  ],
+                )
+              ],
+            ),
           ),
           ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text('Favoritos'),
+            leading: const Icon(Icons.favorite),
+            title: const Text('Favoritos'),
             onTap: () => _favorites(context),
           ),
           ListTile(
-            leading: Icon(Icons.message),
-            title: Text('Mensajes'),
+            leading: const Icon(Icons.message),
+            title: const Text('Mensajes'),
             onTap: () => _messages(context),
           ),
           ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Perfil'),
+            leading: const Icon(Icons.person),
+            title: const Text('Perfil'),
             onTap: () => _profile(context),
           ),
-          //SizedBox.expand(),
           ListTile(
             leading: Icon(Icons.logout, color: Theme.of(context).errorColor),
             title: Text(

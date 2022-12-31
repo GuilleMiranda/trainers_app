@@ -20,4 +20,17 @@ class TrainerService {
       throw Exception('Fallo al recuperar entrenadores');
     }
   }
+
+  Future<List<Entrenador>> fetchCandidates() async {
+    final response =
+        await http.get(Uri.parse('$uri${EnvironmentConstants.get_candidatos}'));
+
+    if (response.statusCode == 200) {
+      return (json.decode(response.body) as List)
+          .map((e) => Entrenador.fromJson(e))
+          .toList();
+    } else {
+      throw Exception('Fallo al recuperar candidatos');
+    }
+  }
 }

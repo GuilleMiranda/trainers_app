@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:trainers_app/model/preferencia_cliente.dart';
 import 'package:intl/intl.dart';
 
-class Cliente {
+class Cliente extends ChangeNotifier {
   late bool activo;
   late String nombres;
   late String apellidos;
@@ -25,13 +26,18 @@ class Cliente {
 
   Cliente.fromJson(Map<String, dynamic> json)
       : email = json['email'],
-        contrasena = json['contrasena'],
+        contrasena = json['contrasena'] ?? '',
         nombres = json['nombres'],
         apellidos = json['apellidos'],
         sexoBiologico = json['genero'],
         nombreMostrado = json['nombreMostrado'],
-        fechaNacimiento = json['fechaNacimiento'],
-        preferenciasCliente = json['preferencias'] ?? [];
+        fechaNacimiento =
+            DateFormat('dd/MM/yyyy').parse(json['fechaNacimiento']),
+        preferenciasCliente = <PreferenciaCliente>[
+              ...(json['preferencias'] as List)
+                  .map((e) => PreferenciaCliente(e['preferencia'], e['valor']))
+                  .toList()
+            ];
 
   Map<String, dynamic> toJson() {
     return {
