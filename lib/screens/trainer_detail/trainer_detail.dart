@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trainers_app/model/cliente.dart';
 import 'package:trainers_app/model/entrenador.dart';
+import 'package:trainers_app/model/match.dart';
 import 'package:trainers_app/screens/chat/chat.dart';
 import 'package:trainers_app/screens/favorites/favorites.dart';
+import 'package:trainers_app/services/match.service.dart';
+
+import '../../model/session.dart';
 
 class TrainerDetail extends StatelessWidget {
   static const routeName = '/trainerdetail';
@@ -9,15 +15,21 @@ class TrainerDetail extends StatelessWidget {
   late Entrenador entrenador;
 
   void _assignTrainer(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        backgroundColor: Colors.green,
-        content: Text('¡Encontraste a tu entrenador!'),
-      ),
-    );
+    Cliente? client = Provider.of<Session>(context, listen: false).client;
 
-    Navigator.of(context)
-        .pushReplacementNamed(Chat.routeName, arguments: entrenador);
+    Match match = Match(client!.id, entrenador.id);
+
+    MatchService.postMatch(match).then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.green,
+          content: Text('¡Encontraste a tu entrenador!'),
+        ),
+      );
+
+      Navigator.of(context)
+          .pushReplacementNamed(Chat.routeName, arguments: entrenador);
+    });
   }
 
   void _addFavorite(BuildContext context) {
@@ -41,7 +53,7 @@ class TrainerDetail extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           child: Column(
             children: [
               ColoredBox(
@@ -52,7 +64,7 @@ class TrainerDetail extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 10),
+                margin: const EdgeInsets.only(top: 10),
                 child: Text(
                   entrenador.nombreMostrado,
                   textAlign: TextAlign.center,
@@ -63,14 +75,15 @@ class TrainerDetail extends StatelessWidget {
                 ),
               ),
               Text(entrenador.descripcion),
-              ConstrainedBox(constraints: BoxConstraints.tight(Size(10, 10))),
+              ConstrainedBox(
+                  constraints: BoxConstraints.tight(const Size(10, 10))),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
                     onPressed: () => _addFavorite(context),
                     child: Row(
-                      children: [
+                      children: const [
                         Icon(Icons.favorite),
                         Text('A favoritos'),
                       ],
@@ -79,7 +92,7 @@ class TrainerDetail extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () => _assignTrainer(context),
                     child: Row(
-                      children: [
+                      children: const [
                         Icon(Icons.handshake),
                         Text('¡Entrenar!'),
                       ],

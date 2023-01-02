@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/preferences_client/preferences.dart';
-import 'package:trainers_app/services/services.dart';
 
 class Profile extends StatelessWidget {
   static const routeName = '/profile';

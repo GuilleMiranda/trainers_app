@@ -36,8 +36,9 @@ class QuestionService {
   }
 
   Future<List<Map<String, dynamic>>> fetchPreferences() async {
-    final response = await http
-        .get(Uri.parse('$uri${EnvironmentConstants.get_preferencias}'));
+    final response = await http.get(
+        Uri.parse('$uri${EnvironmentConstants.get_preferencias}'),
+        headers: EnvironmentConstants.get_headers);
     if (response.statusCode == 200) {
       return ((json.decode(response.body) as List)
           .map(

@@ -9,8 +9,9 @@ class TrainerService {
   final uri = '${EnvironmentConstants.apiUrl}entrenador/';
 
   Future<List<Entrenador>> fetchTrainers() async {
-    final response = await http
-        .get(Uri.parse('$uri${EnvironmentConstants.get_entrenadores}'));
+    final response = await http.get(
+        Uri.parse('$uri${EnvironmentConstants.get_entrenadores}'),
+        headers: EnvironmentConstants.get_headers);
 
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)
@@ -22,8 +23,9 @@ class TrainerService {
   }
 
   Future<List<Entrenador>> fetchCandidates() async {
-    final response =
-        await http.get(Uri.parse('$uri${EnvironmentConstants.get_candidatos}'));
+    final response = await http.get(
+        Uri.parse('$uri${EnvironmentConstants.get_candidatos}'),
+        headers: EnvironmentConstants.get_headers);
 
     if (response.statusCode == 200) {
       return (json.decode(response.body) as List)

@@ -1,5 +1,12 @@
 abstract class EnvironmentConstants {
-  static const String apiUrl = 'http://192.168.0.15:8080/api/v1/';
+  static const String apiUrl = 'http://192.168.133.19:8080/api/v1/';
+  static const Map<String, String> post_headers = {
+    'Content-Type': 'application/json; charset=UTF-8',
+  };
+
+  static const Map<String, String> get_headers = {
+    'Content-Type': 'application/json; charset=UTF-8',
+  };
 
   // Auth
   static const String post_autenticar_cliente = 'autenticar/cliente';
@@ -18,4 +25,7 @@ abstract class EnvironmentConstants {
   // Preguntas
   static const String get_preguntas = 'preguntas';
   static const String get_preferencias = 'preferencias';
+
+  // Match
+  static const post_match = 'match';
 }

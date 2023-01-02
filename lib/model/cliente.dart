@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:trainers_app/model/preferencia_cliente.dart';
 import 'package:intl/intl.dart';
+import 'package:trainers_app/model/preferencia_cliente.dart';
 
 class Cliente extends ChangeNotifier {
+  int? id;
   late bool activo;
   late String nombres;
   late String apellidos;
@@ -25,15 +26,16 @@ class Cliente extends ChangeNotifier {
   }
 
   Cliente.copyOf(Cliente cliente) {
-    this.activo = true;
-    this.nombres = cliente.nombres;
-    this.apellidos = cliente.apellidos;
-    this.nombreMostrado = cliente.nombreMostrado;
-    this.sexoBiologico = cliente.sexoBiologico;
-    this.fechaNacimiento = cliente.fechaNacimiento;
-    this.email = cliente.email;
-    this.contrasena = cliente.contrasena;
-    this.preferenciasCliente = List.of(cliente.preferenciasCliente);
+    id = cliente.id;
+    activo = true;
+    nombres = cliente.nombres;
+    apellidos = cliente.apellidos;
+    nombreMostrado = cliente.nombreMostrado;
+    sexoBiologico = cliente.sexoBiologico;
+    fechaNacimiento = cliente.fechaNacimiento;
+    email = cliente.email;
+    contrasena = cliente.contrasena;
+    preferenciasCliente = List.of(cliente.preferenciasCliente);
   }
 
   Cliente.fromJson(Map<String, dynamic> json)

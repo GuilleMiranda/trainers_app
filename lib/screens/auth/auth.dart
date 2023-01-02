@@ -66,11 +66,11 @@ class _AuthState extends State<Auth> {
         AuthService.authClient(_emailController.text, _passwordController.text)
             .then((id) {
           if (id != -1) {
-            ClientService.getClient(id).then((client) => {
-                  Provider.of<Session>(context, listen: false).update(client!),
-                  Navigator.of(context)
-                      .pushReplacementNamed(HomeScreen.routeName)
-                });
+            ClientService.getClient(id).then((client) {
+              client!.id = id;
+              Provider.of<Session>(context, listen: false).update(client);
+              Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+            });
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: const Text('Usuario y/o contraseña erróneos.'),

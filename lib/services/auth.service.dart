@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:trainers_app/constants/environment.dart';
 
 class AuthService {
-  static String uri = '${EnvironmentConstants.apiUrl}auth/';
+  static const String uri = '${EnvironmentConstants.apiUrl}auth/';
 
   static Future<dynamic> authClient(String username, String password) async {
     Map data = {'email': username, 'contrasena': password};
@@ -13,7 +13,7 @@ class AuthService {
 
     final response = await http.post(
         Uri.parse('$uri${EnvironmentConstants.post_autenticar_cliente}'),
-        headers: {"Content-Type": "application/json"},
+        headers: EnvironmentConstants.post_headers,
         body: body);
 
     if (response.statusCode == 200) {
@@ -34,7 +34,7 @@ class AuthService {
 
     final response = await http.post(
         Uri.parse('$uri${EnvironmentConstants.post_validar_email}'),
-        headers: {"Content-Type": "application/json"},
+        headers: EnvironmentConstants.post_headers,
         body: body);
 
     if (response.statusCode == 200) {
