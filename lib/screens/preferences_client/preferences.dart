@@ -46,14 +46,14 @@ class _PreferencesClientState extends State<PreferencesClient> {
                           _buildPreference(context, snapshot.data),
                           ElevatedButton(
                               onPressed: () {
-                                session.update(client);
+                                session.setClient(client);
                                 ClientService.putClient(session.client!)
                                     .then((value) {
                                   Navigator.of(context).pushReplacementNamed(
                                       HomeScreen.routeName);
                                 });
                               },
-                              child: Text('Guardar')),
+                              child: const Text('Guardar')),
                         ],
                       ),
                     )

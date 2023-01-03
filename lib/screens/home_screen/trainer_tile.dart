@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recase/recase.dart';
 import 'package:trainers_app/model/entrenador.dart';
 
 import '../trainer_detail/trainer_detail.dart';
@@ -21,7 +22,7 @@ class _TrainerTileState extends State<TrainerTile> {
         size: 48,
       ),
       title: Text(
-        widget.entrenador.nombreMostrado,
+        widget.entrenador.nombreMostrado.titleCase,
         style: Theme.of(context).textTheme.titleLarge,
       ),
       subtitle: Row(

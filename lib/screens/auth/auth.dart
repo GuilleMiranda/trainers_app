@@ -68,7 +68,7 @@ class _AuthState extends State<Auth> {
           if (id != -1) {
             ClientService.getClient(id).then((client) {
               client!.id = id;
-              Provider.of<Session>(context, listen: false).update(client);
+              Provider.of<Session>(context, listen: false).setClient(client);
               Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
             });
           } else {

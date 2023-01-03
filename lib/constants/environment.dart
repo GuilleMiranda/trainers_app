@@ -1,5 +1,5 @@
 abstract class EnvironmentConstants {
-  static const String apiUrl = 'http://192.168.133.19:8080/api/v1/';
+  static const String apiUrl = 'http://192.168.0.4:8080/api/v1/';
   static const Map<String, String> post_headers = {
     'Content-Type': 'application/json; charset=UTF-8',
   };

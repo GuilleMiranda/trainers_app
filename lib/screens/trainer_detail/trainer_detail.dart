@@ -20,19 +20,40 @@ class TrainerDetail extends StatelessWidget {
     Match match = Match(client!.id, entrenador.id);
 
     MatchService.postMatch(match).then((value) {
+      Color color;
+      if (value['isMatch']) {
+        color = Colors.green;
+
+        Provider.of<Session>(context, listen: false)
+            .setMatchTrainer(entrenador);
+      } else {
+        color = Colors.orange;
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.green,
-          content: Text('¡Encontraste a tu entrenador!'),
+        SnackBar(
+          backgroundColor: color,
+          content: Text(value['message']),
         ),
       );
 
       Navigator.of(context)
           .pushReplacementNamed(Chat.routeName, arguments: entrenador);
+    }).onError((error, stackTrace) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Algo salió mal'),
+        ),
+      );
     });
   }
 
   void _addFavorite(BuildContext context) {
+    Provider.of<Session>(context, listen: false)
+        .favoriteTrainers
+        .add(entrenador);
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.green,
@@ -56,9 +77,9 @@ class TrainerDetail extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           child: Column(
             children: [
-              ColoredBox(
+              const ColoredBox(
                 color: Colors.blue,
-                child: Container(
+                child: SizedBox(
                   height: 240,
                   width: double.infinity,
                 ),
