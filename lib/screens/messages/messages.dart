@@ -36,50 +36,33 @@ class _MessagesState extends State<Messages> {
 
   Widget _buildMatchList(List<Entrenador> trainers) {
     return ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 8),
         itemCount: trainers.length,
+
         itemBuilder: (context, index) {
-          return Dismissible(
-            key: Key(trainers
-                .elementAt(index)
-                .id
-                .toString()),
-            onDismissed: (direction) {
-              if (direction == DismissDirection.endToStart) {
-                setState(() => trainers.remove(trainers.elementAt(index)));
-              }
-            },
-            direction: DismissDirection.endToStart,
-            background: Container(
-              color: Colors.red,
-              child: const Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: EdgeInsets.only(right: 16),
-                  child: Icon(Icons.delete),
+          return ListTile(
+            leading: SizedBox(
+              width: 52,
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                  'https://randomuser.me/api/portraits/thumb/${_gender(trainers.elementAt(index))}/$index.jpg',
+                  scale: 0.3,
                 ),
+                radius: 52,
               ),
             ),
-            child: ListTile(
-              leading: const Icon(
-                Icons.account_circle,
-                size: 48,
-              ),
-              title: Text(
-                trainers
-                    .elementAt(index)
-                    .nombreMostrado
-                    .titleCase,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .titleLarge,
-              ),
-              onTap: () =>
-                  Navigator.of(context)
-                      .pushReplacementNamed(
-                      Chat.routeName, arguments: trainers.elementAt(index)),
+            title: Text(
+              trainers.elementAt(index).nombreMostrado.titleCase,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
+            onTap: () => Navigator.of(context).pushReplacementNamed(
+                Chat.routeName,
+                arguments: trainers.elementAt(index)),
           );
         });
+  }
+
+  String _gender(Entrenador trainer) {
+    return 'male';
   }
 }

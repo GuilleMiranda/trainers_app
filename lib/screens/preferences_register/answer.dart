@@ -21,6 +21,7 @@ class Answer extends StatefulWidget {
 
 class _AnswerState extends State<Answer> {
   dynamic _currentValue;
+  double _distance = 15.0;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +48,25 @@ class _AnswerState extends State<Answer> {
     List<Map<String, dynamic>> opciones = respuesta['opciones'];
 
     List<Widget> widgets = [];
+
+    if (rango != null) {
+      return Slider(
+        label: '${_distance.floor()}km',
+        value: _distance,
+        min: 5,
+        max: 105,
+        divisions: 10,
+        onChanged: (option) {
+          setState(() {
+            _distance = option.floorToDouble();
+          });
+        },
+        onChangeEnd: (_) {
+          widget.questionHandler(
+              widget.question['pregunta'], _distance.floor());
+        },
+      );
+    }
 
     switch (tipo) {
       case ('RADIO_BUTTON'):

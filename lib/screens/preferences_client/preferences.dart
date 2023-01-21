@@ -67,7 +67,27 @@ class _PreferencesClientState extends State<PreferencesClient> {
     List<Widget> preferences = [];
 
     for (var preference in preferenceTypes) {
-      preferences.add(_buildTile(preference));
+      if (preference['preferencia'] == 'DISTANCIA') {
+        clientOptionId =
+            client.getPreferencia(preference['preferencia'])!.valor;
+        double doubleOption = clientOptionId.toDouble();
+
+        preferences.add(Slider(
+          value: doubleOption,
+          min: 5,
+          max: 100,
+          divisions: 10,
+          onChanged: (option) {
+            setState(() {
+              clientOptionId = option.floor();
+              client.setPreferencia(
+                  preference['preferencia'], int.parse(option.toString()));
+            });
+          },
+        ));
+      }else {
+        preferences.add(_buildTile(preference));
+      }
     }
 
     return Column(
@@ -124,6 +144,12 @@ class _PreferencesClientState extends State<PreferencesClient> {
         return 'Lugar';
       case 'CONDICION_SALUD':
         return '¿Alguna condición de salud?';
+      case 'HORARIO':
+        return '¿Horario?';
+      case 'SEXO_ENTRENADOR':
+        return 'Preferís que tu entrenador sea';
+      case 'DISTANCIA':
+        return '¿Qué tan lejos (km) puede estar tu entrenador?';
       default:
         return preference.headerCase;
     }

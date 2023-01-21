@@ -1,4 +1,4 @@
-
+import 'package:intl/intl.dart';
 
 class Entrenador {
   final int id;
@@ -42,5 +42,21 @@ class Entrenador {
       nombreMostrado: json['nombreMostrado'],
       fechaNacimiento: json['fechaNacimiento'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'descripcion': descripcion,
+      'calificacion': calificacion,
+      'experiencia': experiencia,
+      'latitud': latitud,
+      'longitud': longitud,
+      'activo': activo,
+      'nombres': nombres,
+      'apellidos': apellidos,
+      'nombreMostrado': nombreMostrado,
+      'fechaNacimiento': fechaNacimiento,
+    };
   }
 }

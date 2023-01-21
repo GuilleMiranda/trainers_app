@@ -1,5 +1,8 @@
 abstract class EnvironmentConstants {
-  static const String apiUrl = 'http://192.168.0.4:8080/api/v1/';
+  static const String ip = '192.168.100.124';
+  static const String apiUrl = 'http://$ip:8080/api/v1/';
+  static const String wsUrl = 'http://$ip:80/ws/app/';
+
   static const Map<String, String> post_headers = {
     'Content-Type': 'application/json; charset=UTF-8',
   };
@@ -16,6 +19,9 @@ abstract class EnvironmentConstants {
   static const String get_cliente = 'cliente';
   static const String post_cliente = 'cliente';
   static const String put_cliente = 'cliente';
+  static const String delete_favorito = 'favorito';
+  static const String get_favoritos = 'favoritos';
+  static const String post_favorito = 'favorito';
 
   // Entrenador
   static const String get_entrenador = 'entrenador';
@@ -27,5 +33,7 @@ abstract class EnvironmentConstants {
   static const String get_preferencias = 'preferencias';
 
   // Match
+  static const get_matches_cliente = 'matchesCliente';
   static const post_match = 'match';
+  static const post_unmatch = 'unmatch';
 }

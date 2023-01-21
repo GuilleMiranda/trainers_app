@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:trainers_app/model/preferencia_cliente.dart';
 
 class Cliente extends ChangeNotifier {
-  int? id;
+  late int id;
   late bool activo;
   late String nombres;
   late String apellidos;
@@ -16,7 +18,7 @@ class Cliente extends ChangeNotifier {
 
   late List<PreferenciaCliente> preferenciasCliente;
 
-  Cliente(this.activo, this.nombres, this.apellidos, this.nombreMostrado,
+  Cliente(this.id, this.activo, this.nombres, this.apellidos, this.nombreMostrado,
       this.sexoBiologico, this.fechaNacimiento, this.email, this.contrasena) {
     preferenciasCliente = [];
   }
@@ -39,7 +41,8 @@ class Cliente extends ChangeNotifier {
   }
 
   Cliente.fromJson(Map<String, dynamic> json)
-      : activo = true,
+      : id = json['id'],
+        activo = true,
         email = json['email'],
         contrasena = json['contrasena'] ?? '',
         nombres = json['nombres'],

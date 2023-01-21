@@ -17,9 +17,15 @@ class _TrainerTileState extends State<TrainerTile> {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      leading: const Icon(
-        Icons.account_circle,
-        size: 48,
+      leading: const SizedBox(
+        width: 52,
+        child: CircleAvatar(
+          backgroundImage: NetworkImage(
+            'https://source.unsplash.com/512x512/?portrait',
+            scale: 0.3,
+          ),
+          radius: 52,
+        ),
       ),
       title: Text(
         widget.entrenador.nombreMostrado.titleCase,

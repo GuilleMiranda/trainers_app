@@ -6,8 +6,18 @@ import 'package:trainers_app/model/entrenador.dart';
 
 class Session extends ChangeNotifier {
   Cliente? client;
+  double? latitude;
+  double? longitude;
   List<Entrenador> matchTrainers = [];
   Set<Entrenador> favoriteTrainers = <Entrenador>{};
+
+  void setLatitude(double latitude) {
+    this.latitude = latitude;
+  }
+
+  void setLongitude(double longitude) {
+    this.longitude = longitude;
+  }
 
   void setClient(Cliente client) {
     this.client = client;
@@ -19,8 +29,13 @@ class Session extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setFavoriteTrainers(Set<Entrenador> trainers) {
+    favoriteTrainers = trainers;
+    notifyListeners();
+  }
+
   void removeFavoriteTrainer(Entrenador trainer) {
-    favoriteTrainers.remove(trainer);
+    if (favoriteTrainers.contains(trainer)) favoriteTrainers.remove(trainer);
     notifyListeners();
   }
 
@@ -29,8 +44,13 @@ class Session extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setMatchTrainers(List<Entrenador> trainers) {
+    matchTrainers = trainers;
+    notifyListeners();
+  }
+
   void removeMatchTrainer(Entrenador trainer) {
-    matchTrainers.remove(trainer);
+    if (matchTrainers.contains(trainer)) matchTrainers.remove(trainer);
     notifyListeners();
   }
 

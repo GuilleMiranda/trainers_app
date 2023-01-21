@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:provider/provider.dart';
 import 'package:trainers_app/constants/environment.dart';
 import 'package:trainers_app/model/entrenador.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:trainers_app/model/session.dart';
 
 class TrainerService {
   final uri = '${EnvironmentConstants.apiUrl}entrenador/';
@@ -22,9 +24,15 @@ class TrainerService {
     }
   }
 
-  Future<List<Entrenador>> fetchCandidates() async {
-    final response = await http.get(
-        Uri.parse('$uri${EnvironmentConstants.get_candidatos}'),
+  Future<List<Entrenador>> fetchCandidates(id, lat, lon) async {
+    String uriWithParams;
+    if (lat == null || lon == null) {
+      uriWithParams = '$uri${EnvironmentConstants.get_candidatos}?id=$id';
+    } else {
+      uriWithParams =
+          '$uri${EnvironmentConstants.get_candidatos}?id=$id&lat=$lat&lon=$lon';
+    }
+    final response = await http.get(Uri.parse(uriWithParams),
         headers: EnvironmentConstants.get_headers);
 
     if (response.statusCode == 200) {

@@ -103,8 +103,8 @@ class Register extends StatelessWidget {
       cliente.activo = true;
       cliente.sexoBiologico = sexoBiologico;
 
-      Navigator.of(context)
-          .pushReplacementNamed(PreferencesRegister.routeName, arguments: cliente);
+      Navigator.of(context).pushReplacementNamed(PreferencesRegister.routeName,
+          arguments: cliente);
     }
   }
 }

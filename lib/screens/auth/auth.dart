@@ -67,8 +67,8 @@ class _AuthState extends State<Auth> {
             .then((id) {
           if (id != -1) {
             ClientService.getClient(id).then((client) {
-              client!.id = id;
-              Provider.of<Session>(context, listen: false).setClient(client);
+              Provider.of<Session>(context, listen: false).setClient(client!);
+
               Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
             });
           } else {
@@ -78,6 +78,12 @@ class _AuthState extends State<Auth> {
             ));
             _formKey.currentState!.reset();
           }
+        }).onError((error, stackTrace) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              backgroundColor: Colors.red,
+              content: Text('Algo salió mal. Intentá de nuevo.')));
+
+          Navigator.of(context).reassemble();
         });
       } else if (_authMode == AuthMode.Register) {
         AuthService.validateEmail(_emailController.text).then((value) {

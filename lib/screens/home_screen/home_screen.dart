@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +8,9 @@ import 'package:trainers_app/model/entrenador.dart';
 import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/auth/auth.dart';
 import 'package:trainers_app/screens/home_screen/trainer_tile.dart';
+import 'package:trainers_app/services/match.service.dart';
 
+import '../../model/cliente.dart';
 import '../../services/services.dart';
 import '../favorites/favorites.dart';
 import '../messages/messages.dart';
@@ -28,12 +32,21 @@ class _HomeScreenState extends State<HomeScreen> {
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
 
+  Future<List<Entrenador>> getCandidates(
+      BuildContext context, Session session) async {
+    int? id = session.client?.id;
+
+    _locationData = (await _location())!;
+
+    session.setLatitude(_locationData.latitude!);
+    session.setLongitude(_locationData.longitude!);
+    return TrainerService()
+        .fetchCandidates(id, _locationData.latitude, _locationData.longitude);
+  }
+
   @override
   void initState() {
     super.initState();
-    _location().then((value) => print(_locationData.latitude));
-
-    _futureEntrenadores = TrainerService().fetchCandidates();
   }
 
   @override
@@ -44,19 +57,23 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       drawer: Consumer<Session>(
           builder: (context, session, child) => buildDrawer(context, session)),
-      body: FutureBuilder(
-        future: _futureEntrenadores,
-        builder:
-            (BuildContext context, AsyncSnapshot<List<Entrenador>> snapshot) =>
-                snapshot.hasData
-                    ? ListView.builder(
-                        itemCount: snapshot.data?.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return TrainerTile(snapshot.data![index]);
-                        })
-                    : const Center(
-                        child: CircularProgressIndicator(),
-                      ),
+      body: Consumer<Session>(
+        builder: (context, session, child) => session.client != null
+            ? FutureBuilder(
+                future: getCandidates(context, session),
+                builder: (BuildContext context,
+                        AsyncSnapshot<List<Entrenador>> snapshot) =>
+                    snapshot.hasData
+                        ? ListView.builder(
+                            itemCount: snapshot.data?.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return TrainerTile(snapshot.data![index]);
+                            })
+                        : const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+              )
+            : const Center(child: CircularProgressIndicator()),
       ),
     );
   }
@@ -115,10 +132,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _favorites(BuildContext context) {
+    Cliente client = Provider.of<Session>(this.context, listen: false).client!;
+
+    ClientService.getFavorites(client.id);
+
     Navigator.of(context).pushNamed(Favorites.routeName);
   }
 
   void _messages(BuildContext context) {
+    var client = Provider.of<Session>(context, listen: false).client;
+    int id = -1;
+    if (client == null) {
+      Provider.of<Session>(context, listen: true).remove();
+      Navigator.of(context).pushNamed(Auth.routeName);
+      return;
+    }
+
+    id = client.id;
+    MatchService.getClientMatches(id).then((trainers) =>
+        Provider.of<Session>(context, listen: false)
+            .setMatchTrainers(trainers));
+
     Navigator.of(context).pushNamed(Messages.routeName);
   }
 
@@ -126,20 +160,20 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.of(context).pushNamed(Profile.routeName);
   }
 
-  Future<void> _location() async {
+  Future<LocationData?> _location() async {
     _isServiceEnabled = await location.serviceEnabled();
     if (!_isServiceEnabled) {
       _isServiceEnabled = await location.requestService();
-      if (!_isServiceEnabled) return;
+      if (!_isServiceEnabled) return null;
     }
 
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) return;
+      if (_permissionGranted != PermissionStatus.granted) return null;
     }
 
-    _locationData = await location.getLocation();
+    return await location.getLocation();
   }
 
   void _logout() {
