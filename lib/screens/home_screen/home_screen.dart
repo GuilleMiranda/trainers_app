@@ -134,7 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void _favorites(BuildContext context) {
     Cliente client = Provider.of<Session>(this.context, listen: false).client!;
 
-    ClientService.getFavorites(client.id);
+    ClientService.getFavorites(client.id).then((trainers) =>
+        Provider.of<Session>(context, listen: false)
+            .setFavoriteTrainers(trainers.toSet()));
 
     Navigator.of(context).pushNamed(Favorites.routeName);
   }

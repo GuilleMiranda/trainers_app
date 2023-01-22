@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recase/recase.dart';
 import 'package:trainers_app/model/cliente.dart';
 import 'package:trainers_app/model/entrenador.dart';
 import 'package:trainers_app/model/match.dart';
@@ -16,52 +17,67 @@ class TrainerDetail extends StatelessWidget {
   late Entrenador trainer;
 
   void _assignTrainer(BuildContext context) {
-    Cliente? client = Provider.of<Session>(context, listen: false).client;
+    if (!Provider.of<Session>(context, listen: false)
+        .matchTrainers
+        .contains(trainer)) {
+      Cliente? client = Provider.of<Session>(context, listen: false).client;
 
-    Match match = Match(client!.id, trainer.id);
+      Match match = Match(client!.id, trainer.id);
 
-    MatchService.postMatch(match).then((value) {
-      Color color;
-      if (value['isMatch']) {
-        color = Colors.green;
-      } else {
-        color = Colors.orange;
-      }
+      MatchService.postMatch(match).then((value) {
+        Color color;
+        if (value['isMatch']) {
+          color = Colors.green;
+        } else {
+          color = Colors.orange;
+        }
 
-      Provider.of<Session>(context, listen: false).setMatchTrainer(trainer);
+        Provider.of<Session>(context, listen: false).setMatchTrainer(trainer);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: color,
-          content: Text(value['message']),
-        ),
-      );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: color,
+            content: Text(value['message']),
+          ),
+        );
 
+        Navigator.of(context)
+            .pushReplacementNamed(Chat.routeName, arguments: trainer);
+      }).onError((error, stackTrace) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Algo salió mal'),
+          ),
+        );
+      });
+    } else {
       Navigator.of(context)
           .pushReplacementNamed(Chat.routeName, arguments: trainer);
-    }).onError((error, stackTrace) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text('Algo salió mal'),
-        ),
-      );
-    });
+    }
   }
 
   void _addFavorite(BuildContext context) {
-    int? clientId = Provider.of<Session>(context, listen: false).client?.id;
-    ClientService.postFavorite(trainer, clientId).then((_) {
-      Provider.of<Session>(context, listen: false).setFavoriteTrainer(trainer);
+    if (!Provider.of<Session>(context, listen: false)
+        .favoriteTrainers
+        .contains(trainer)) {
+      int? clientId = Provider.of<Session>(context, listen: false).client?.id;
+      ClientService.postFavorite(trainer, clientId).then((_) {
+        Provider.of<Session>(context, listen: false)
+            .setFavoriteTrainer(trainer);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.green,
-          content: Text('Agregaste a ${trainer.nombreMostrado} a tu lista'),
-        ),
-      );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(
+                'Agregaste a ${trainer.nombreMostrado.titleCase} a tu lista.'),
+          ),
+        );
+        Navigator.of(context).pushReplacementNamed(Favorites.routeName);
+      });
+    } else {
       Navigator.of(context).pushReplacementNamed(Favorites.routeName);
-    });
+    }
   }
 
   @override

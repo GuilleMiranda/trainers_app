@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 import 'package:trainers_app/model/entrenador.dart';
 import 'package:trainers_app/model/session.dart';
+import 'package:trainers_app/screens/trainer_detail/trainer_detail.dart';
 import 'package:trainers_app/services/client.service.dart';
 
 class Favorites extends StatefulWidget {
@@ -41,31 +42,45 @@ class _FavoritesState extends State<Favorites> {
             leading: const SizedBox(
               width: 52,
               child: CircleAvatar(
-                backgroundImage: NetworkImage(
-                  'https://source.unsplash.com/512x512/?portrait',
-                  scale: 0.3,
-                ),
                 radius: 52,
+                child: Icon(Icons.account_circle),
               ),
             ),
             title: Text(
-              trainers.elementAt(index).nombreMostrado.titleCase,
-              style: Theme.of(context).textTheme.titleLarge,
+              trainers
+                  .elementAt(index)
+                  .nombreMostrado
+                  .titleCase,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .titleLarge,
             ),
             trailing: IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
                 int? clientId =
-                    Provider.of<Session>(context, listen: false).client?.id;
+                    Provider
+                        .of<Session>(context, listen: false)
+                        .client
+                        ?.id;
 
                 ClientService.deleteFavorite(
-                        clientId, trainers.elementAt(index).id)
-                    .then((ok) => ok
-                        ? setState(
-                            () => trainers.remove(trainers.elementAt(index)))
-                        : null);
+                    clientId, trainers
+                    .elementAt(index)
+                    .id)
+                    .then((ok) =>
+                ok
+                    ? setState(
+                        () => trainers.remove(trainers.elementAt(index)))
+                    : null);
               },
             ),
+            onTap: () =>
+                Navigator.of(context).pushReplacementNamed(
+                    TrainerDetail.routeName,
+                    arguments: trainers.elementAt(index))
+            ,
           );
         });
   }

@@ -60,9 +60,7 @@ class Profile extends StatelessWidget {
                     children: [
                       const CircleAvatar(
                         minRadius: 100,
-                        backgroundImage: NetworkImage(
-                          'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-                        ),
+                        child: Icon(Icons.account_circle),
                       ),
                       Text(
                         '${session.client?.nombreMostrado}'.titleCase,

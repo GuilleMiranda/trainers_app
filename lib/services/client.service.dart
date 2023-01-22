@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 import 'package:trainers_app/constants/environment.dart';
 import 'package:trainers_app/model/cliente.dart';
 import 'package:trainers_app/model/entrenador.dart';
@@ -58,9 +57,9 @@ class ClientService {
         Uri.parse('$uri${EnvironmentConstants.get_favoritos}/$id'),
         headers: EnvironmentConstants.get_headers);
 
-    if (response.body.isNotEmpty) {
-      return (jsonDecode(response.body) as List)
-          .map((e) => Entrenador.fromJson(jsonDecode(e)))
+    if (response.statusCode == 200) {
+      return (jsonDecode(response.body) as List<dynamic>)
+          .map((e) => Entrenador.fromJson(e))
           .toList();
     }
     return <Entrenador>[];

@@ -1,11 +1,8 @@
 import 'dart:convert';
 
-import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:trainers_app/constants/environment.dart';
 import 'package:trainers_app/model/entrenador.dart';
-
-import 'package:http/http.dart' as http;
-import 'package:trainers_app/model/session.dart';
 
 class TrainerService {
   final uri = '${EnvironmentConstants.apiUrl}entrenador/';

@@ -20,11 +20,8 @@ class _TrainerTileState extends State<TrainerTile> {
       leading: const SizedBox(
         width: 52,
         child: CircleAvatar(
-          backgroundImage: NetworkImage(
-            'https://source.unsplash.com/512x512/?portrait',
-            scale: 0.3,
-          ),
           radius: 52,
+          child: Icon(Icons.account_circle),
         ),
       ),
       title: Text(

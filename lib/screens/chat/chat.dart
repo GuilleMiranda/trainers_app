@@ -11,6 +11,7 @@ import 'package:trainers_app/model/entrenador.dart';
 import 'package:trainers_app/model/match.dart';
 import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/services/match.service.dart';
+import 'package:trainers_app/services/chat_client.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class Chat extends StatefulWidget {
@@ -23,47 +24,31 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   late Entrenador trainer;
 
+  final channel = WebSocketChannel.connect(Uri.parse(EnvironmentConstants.wsUrl));
   TextEditingController messageController = TextEditingController();
-
-  StreamController<List<String>> streamController = StreamController();
-  var messageList = <String>[];
-
-  final stompClient = StompClient(
-      config: StompConfig(
-          url: EnvironmentConstants.wsUrl,
-          useSockJS: true,
-          onConnect: (c) => print(c.body),
-          onStompError: (e) => "stomp err ${e.body}",
-          onWebSocketError: (e) => "ws err ${e}",
-          onDisconnect: (d) => print("disconnected")));
-
-  void onConnect(StompFrame frame) {
-    stompClient.subscribe(
-        destination: "/",
-        callback: (frame) {
-          Map<String, dynamic> result = jsonDecode(frame.body!);
-          messageList.add(result['content']);
-          streamController.sink.add(messageList);
-        });
-  }
 
   @override
   void initState() {
-    stompClient.activate();
+    if (!ChatClient.stompClient.isActive) {
+      ChatClient.stompClient.activate();
+    }
   }
 
-  //WebSocketChannel.connect(Uri.parse("ws://192.168.0.10:80/ws"));
+
 
   @override
   void dispose() {
     //_channel.sink.close(_channel.closeCode);
-    stompClient.deactivate();
+    if (!ChatClient.stompClient.isActive) {
+      ChatClient.stompClient.deactivate();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     trainer = ModalRoute.of(context)!.settings.arguments as Entrenador;
+    ChatClient.setTrainer(trainer);
     return Scaffold(
       appBar: AppBar(
         title: Text(trainer.nombreMostrado),
@@ -78,7 +63,7 @@ class _ChatState extends State<Chat> {
               })
         ],
       ),
-      body: _buildMessageList(messageList),
+      body: _buildMessageList(ChatClient.messageList),
       bottomSheet: SizedBox(
           height: MediaQuery.of(context).size.height * 0.1,
           child: Row(
@@ -108,7 +93,7 @@ class _ChatState extends State<Chat> {
   Widget _buildMessageList(messageList) {
     return SingleChildScrollView(
       child: StreamBuilder(
-        stream: streamController.stream,
+        stream: ChatClient.streamController.stream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
@@ -116,7 +101,7 @@ class _ChatState extends State<Chat> {
             );
           } else {
             messageList = snapshot.data;
-            return Text(jsonDecode(messageList)['contenido']);
+            return Text(jsonDecode(messageList)['content']);
             // return ListView.builder(itemBuilder: (context, index) {
             //   return _buildChatItem(messageList[index]);
             // });
@@ -132,8 +117,8 @@ class _ChatState extends State<Chat> {
 
   void _sendMessage() {
     if (messageController.text.isNotEmpty) {
-      stompClient.send(
-        destination: "/chat",
+      ChatClient.stompClient.send(
+        destination: "/app/chat",
         body: json.encode({
           "id": "1",
           "chatId": "1",

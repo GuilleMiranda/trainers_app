@@ -38,17 +38,13 @@ class _MessagesState extends State<Messages> {
     return ListView.builder(
         padding: const EdgeInsets.symmetric(vertical: 8),
         itemCount: trainers.length,
-
         itemBuilder: (context, index) {
           return ListTile(
-            leading: SizedBox(
+            leading: const SizedBox(
               width: 52,
               child: CircleAvatar(
-                backgroundImage: NetworkImage(
-                  'https://randomuser.me/api/portraits/thumb/${_gender(trainers.elementAt(index))}/$index.jpg',
-                  scale: 0.3,
-                ),
                 radius: 52,
+                child: Icon(Icons.account_circle),
               ),
             ),
             title: Text(
