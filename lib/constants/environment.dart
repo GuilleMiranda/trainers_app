@@ -1,7 +1,7 @@
 abstract class EnvironmentConstants {
-  static const String ip = '192.168.0.11';
+  static const String ip = '192.168.100.124';
   static const String apiUrl = 'http://$ip:8080/api/v1/';
-  static const String wsUrl = 'ws://$ip:80/ws';
+  static const String wsUrl = 'ws://$ip:80/chat';
 
   static const Map<String, String> post_headers = {
     'Content-Type': 'application/json; charset=UTF-8',
@@ -14,6 +14,9 @@ abstract class EnvironmentConstants {
   // Auth
   static const String post_autenticar_cliente = 'autenticar/cliente';
   static const String post_validar_email = 'validar/email';
+
+  // Chat
+  static const String get_mensajes = 'mensajes';
 
   // Cliente
   static const String get_cliente = 'cliente';

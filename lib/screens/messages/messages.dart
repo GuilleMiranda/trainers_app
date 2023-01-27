@@ -58,7 +58,4 @@ class _MessagesState extends State<Messages> {
         });
   }
 
-  String _gender(Entrenador trainer) {
-    return 'male';
-  }
 }

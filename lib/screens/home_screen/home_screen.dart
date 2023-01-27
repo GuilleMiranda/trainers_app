@@ -26,13 +26,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<Entrenador>> _futureEntrenadores;
   Location location = Location();
   late bool _isServiceEnabled;
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
 
-  Future<List<Entrenador>> getCandidates(
+  Future<List<Entrenador>> _candidates(
       BuildContext context, Session session) async {
     int? id = session.client?.id;
 
@@ -40,6 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     session.setLatitude(_locationData.latitude!);
     session.setLongitude(_locationData.longitude!);
+    print(_locationData.latitude);
+    print(_locationData.longitude);
+
     return TrainerService()
         .fetchCandidates(id, _locationData.latitude, _locationData.longitude);
   }
@@ -60,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Consumer<Session>(
         builder: (context, session, child) => session.client != null
             ? FutureBuilder(
-                future: getCandidates(context, session),
+                future: _candidates(context, session),
                 builder: (BuildContext context,
                         AsyncSnapshot<List<Entrenador>> snapshot) =>
                     snapshot.hasData
