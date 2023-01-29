@@ -54,6 +54,10 @@ class Session extends ChangeNotifier {
     notifyListeners();
   }
 
+  Entrenador getTrainer(int trainerId) {
+    return matchTrainers.firstWhere((element) => element.id == trainerId);
+  }
+
   void remove() {
     client = null;
     favoriteTrainers = <Entrenador>{};

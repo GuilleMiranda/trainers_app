@@ -51,11 +51,16 @@ class _MessagesState extends State<Messages> {
               trainers.elementAt(index).nombreMostrado.titleCase,
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            onTap: () => Navigator.of(context).pushReplacementNamed(
-                Chat.routeName,
-                arguments: trainers.elementAt(index)),
+            onTap: () {
+              var clientId =
+                  Provider.of<Session>(context, listen: false).client?.id;
+              Navigator.of(context).pushReplacementNamed(Chat.routeName,
+                  arguments: {
+                    ...trainers.elementAt(index).toJson(),
+                    'clientId': clientId
+                  });
+            },
           );
         });
   }
-
 }

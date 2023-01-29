@@ -41,8 +41,8 @@ class TrainerDetail extends StatelessWidget {
           ),
         );
 
-        Navigator.of(context)
-            .pushReplacementNamed(Chat.routeName, arguments: trainer);
+        Navigator.of(context).pushReplacementNamed(Chat.routeName,
+            arguments: {...trainer.toJson(), 'clientId': client.id});
       }).onError((error, stackTrace) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

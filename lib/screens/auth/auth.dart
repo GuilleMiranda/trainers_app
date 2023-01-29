@@ -29,6 +29,14 @@ class _AuthState extends State<Auth> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    _emailController.text = '';
+    _passwordController.text = '';
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -76,9 +84,13 @@ class _AuthState extends State<Auth> {
               content: const Text('Usuario y/o contraseña erróneos.'),
               backgroundColor: Theme.of(context).errorColor,
             ));
+            _emailController.clear();
+            _passwordController.clear();
             _formKey.currentState!.reset();
           }
         }).onError((error, stackTrace) {
+          _emailController.clear();
+          _passwordController.clear();
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               backgroundColor: Colors.red,
               content: Text('Algo salió mal. Intentá de nuevo.')));

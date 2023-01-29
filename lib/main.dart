@@ -41,7 +41,10 @@ class Trainers extends StatelessWidget {
         Profile.routeName: (context) => Profile(),
         Register.routeName: (context) => Register(),
         TrainerDetail.routeName: (context) => TrainerDetail(),
-        Chat.routeName: (context) => Chat(),
+        Chat.routeName: (context) => Chat(
+              arguments: (ModalRoute.of(context)?.settings.arguments
+                  as Map<String, dynamic>),
+            ),
         PreferencesRegister.routeName: (context) => PreferencesRegister(),
         PreferencesClient.routeName: (context) => PreferencesClient()
       },

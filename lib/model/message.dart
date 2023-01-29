@@ -8,6 +8,14 @@ class Message {
   Message(
       this.senderId, this.recipientId, this.tipo, this.contenido, this.fecha);
 
+  Message.copyOf(Message message)
+      : senderId = message.senderId,
+        recipientId = message.recipientId,
+        tipo = message.tipo,
+        contenido = message.contenido,
+        fecha = message.fecha;
+
+
   Message.fromJson(Map<String, dynamic> json)
       : senderId = json['senderId'],
         recipientId = json['recipientId'],

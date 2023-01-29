@@ -72,18 +72,26 @@ class _PreferencesClientState extends State<PreferencesClient> {
             client.getPreferencia(preference['preferencia'])!.valor;
         double doubleOption = clientOptionId.toDouble();
 
-        preferences.add(Slider(
-          value: doubleOption,
-          min: 5,
-          max: 100,
-          divisions: 10,
-          onChanged: (option) {
-            setState(() {
-              clientOptionId = option.floor();
-              client.setPreferencia(
-                  preference['preferencia'], int.parse(option.toString()));
-            });
-          },
+        preferences.add(Column(
+          children: [
+            Text(
+              _preferenceLabel(preference['preferencia']),
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            Slider(
+              value: doubleOption,
+              min: 5,
+              max: 100,
+              divisions: 10,
+              onChanged: (option) {
+                setState(() {
+                  clientOptionId = option.floor();
+                  client.setPreferencia(
+                      preference['preferencia'], int.parse(option.toString()));
+                });
+              },
+            ),
+          ],
         ));
       }else {
         preferences.add(_buildTile(preference));
