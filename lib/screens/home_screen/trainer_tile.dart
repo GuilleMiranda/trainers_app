@@ -17,11 +17,12 @@ class _TrainerTileState extends State<TrainerTile> {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      leading: const SizedBox(
+      leading: SizedBox(
         width: 52,
         child: CircleAvatar(
           radius: 52,
-          child: Icon(Icons.account_circle),
+          child: Text(
+              '${widget.entrenador.nombres[0]}${widget.entrenador.apellidos[0]}'),
         ),
       ),
       title: Text(
