@@ -85,7 +85,7 @@ class _ChatState extends State<Chat> {
     _channel.stream.listen((message) {
       Message incomingMessage = Message.fromJson(jsonDecode('$message'));
       if (incomingMessage.senderId.toString() == trainerId.toString()) {
-        _messageList.add(incomingMessage);
+        _messageList.insert(0, incomingMessage);
         setState(() {});
       }
     }, onError: (error) {
