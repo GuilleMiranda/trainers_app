@@ -28,6 +28,9 @@ class TextMessage extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: Text(
+        textAlign: clientId.toString() == message.senderId
+            ? TextAlign.end
+            : TextAlign.start,
         message.contenido,
       ),
     );

@@ -40,11 +40,15 @@ class _MessagesState extends State<Messages> {
         itemCount: trainers.length,
         itemBuilder: (context, index) {
           return ListTile(
-            leading: const SizedBox(
+            leading: SizedBox(
               width: 52,
               child: CircleAvatar(
                 radius: 52,
-                child: Icon(Icons.account_circle),
+                child: CircleAvatar(
+                  radius: 52,
+                  child: Text(
+                      '${trainers.elementAt(index).nombres[0]}${trainers.elementAt(index).apellidos[0]}'),
+                ),
               ),
             ),
             title: Text(

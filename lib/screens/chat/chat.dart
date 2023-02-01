@@ -128,8 +128,9 @@ class _ChatState extends State<Chat> {
       Message send = Message.copyOf(_outMessageTemplate);
       send.contenido = messageController.text;
       send.fecha =
-          DateFormat("yyyy-MM-ddTHH:mm:ss+01:00").format(DateTime.now());
+          DateFormat("yyyy-MM-ddTHH:mm:ss-03:00").format(DateTime.now());
 
+      print(jsonEncode(send.toJson()));
       _channel.sink.add(jsonEncode(send.toJson()));
 
       setState(() => _messageList.insert(0, send));
