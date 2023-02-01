@@ -88,6 +88,13 @@ class _ChatState extends State<Chat> {
         _messageList.add(incomingMessage);
         setState(() {});
       }
+    }, onError: (error) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+        'Ocurrió un error',
+        style: TextStyle(color: Colors.red),
+      )));
+      Navigator.of(context).pop();
     });
   }
 
@@ -120,7 +127,8 @@ class _ChatState extends State<Chat> {
     if (messageController.text.isNotEmpty) {
       Message send = Message.copyOf(_outMessageTemplate);
       send.contenido = messageController.text;
-      send.fecha = DateFormat("yyyy-MM-ddTH:m:s+01:00").format(DateTime.now());
+      send.fecha =
+          DateFormat("yyyy-MM-ddTHH:mm:ss+01:00").format(DateTime.now());
 
       _channel.sink.add(jsonEncode(send.toJson()));
 
