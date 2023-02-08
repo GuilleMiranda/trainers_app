@@ -100,6 +100,7 @@ class _ChatState extends State<Chat> {
 
   Widget _buildMessageList() {
     return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
       reverse: true,
       controller: _scrollController,
       itemCount: _messageList.length,
@@ -109,11 +110,7 @@ class _ChatState extends State<Chat> {
               _messageList.elementAt(index).senderId == clientId.toString()
                   ? MainAxisAlignment.end
                   : MainAxisAlignment.start,
-          children: [
-            Row(
-              children: [TextMessage(message: _messageList.elementAt(index))],
-            )
-          ],
+          children: [TextMessage(message: _messageList.elementAt(index))],
         );
       },
     );
@@ -127,8 +124,10 @@ class _ChatState extends State<Chat> {
     if (messageController.text.isNotEmpty) {
       Message send = Message.copyOf(_outMessageTemplate);
       send.contenido = messageController.text;
-      send.fecha =
-          DateFormat("yyyy-MM-ddTHH:mm:ss-03:00").format(DateTime.now());
+      var offset = DateTime.now().timeZoneOffset;
+      var utcDate = DateTime.now().add(offset);
+
+      send.fecha = DateFormat("yyyy-MM-ddTHH:mm:ss-03:00").format(utcDate);
 
       print(jsonEncode(send.toJson()));
       _channel.sink.add(jsonEncode(send.toJson()));

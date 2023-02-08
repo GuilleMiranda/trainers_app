@@ -29,7 +29,7 @@ class _MessagesState extends State<Messages> {
                 child: Text('Elegí a tu entrenador para verlo acá.'),
               );
             }
-            return _buildMatchList(session.matchTrainers);
+            return _buildMatchList(session.matchTrainers.reversed.toList());
           },
         ));
   }
