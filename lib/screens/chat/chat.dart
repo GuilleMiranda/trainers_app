@@ -10,6 +10,7 @@ import 'package:trainers_app/model/match.dart';
 import 'package:trainers_app/model/message.dart';
 import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/chat/components/text_message.dart';
+import 'package:trainers_app/screens/trainer_detail/trainer_detail.dart';
 import 'package:trainers_app/services/chat.service.dart';
 import 'package:trainers_app/services/match.service.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -194,6 +195,8 @@ class _ChatState extends State<Chat> {
             itemBuilder: (context) {
               return [
                 const PopupMenuItem(
+                    value: 'PROFILE', child: Text('Ver perfil')),
+                const PopupMenuItem(
                     value: 'UNMATCH', child: Text('Cancelar match'))
               ];
             })
@@ -202,24 +205,38 @@ class _ChatState extends State<Chat> {
   }
 
   Future<void> _handleSelectMenuItem(String value) {
-    return showDialog<void>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            alignment: Alignment.center,
-            title: Text('¿Querés eliminar a este entrenador de tu lista?'),
-            actions: [
-              TextButton(
-                  style: TextButton.styleFrom(
-                      textStyle: Theme.of(context).textTheme.labelLarge),
-                  onPressed: () {
-                    _unmatch();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Confirmar'))
-            ],
-          );
-        });
+    switch (value) {
+      case 'PROFILE':
+        Entrenador trainer =
+            Provider.of<Session>(context, listen: false).getTrainer(trainerId);
+        return Navigator.of(context)
+            .pushReplacementNamed(TrainerDetail.routeName, arguments: trainer);
+      case 'UNMATCH':
+        return showDialog<void>(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                alignment: Alignment.center,
+                title: Text('¿Querés eliminar a este entrenador de tu lista?'),
+                actions: [
+                  TextButton(
+                      style: TextButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.labelLarge),
+                      onPressed: () {
+                        _unmatch();
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Confirmar'))
+                ],
+              );
+            });
+      default:
+        return showDialog(
+            context: context,
+            builder: (context) => const AlertDialog(
+                  title: Text('Este es un mensaje secreto. shhh'),
+                ));
+    }
   }
 }

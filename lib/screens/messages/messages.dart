@@ -58,7 +58,7 @@ class _MessagesState extends State<Messages> {
             onTap: () {
               var clientId =
                   Provider.of<Session>(context, listen: false).client?.id;
-              Navigator.of(context).pushReplacementNamed(Chat.routeName,
+              Navigator.of(context).pushNamed(Chat.routeName,
                   arguments: {
                     ...trainers.elementAt(index).toJson(),
                     'clientId': clientId
