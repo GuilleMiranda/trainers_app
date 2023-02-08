@@ -17,11 +17,11 @@ class TrainerDetail extends StatelessWidget {
   late Entrenador trainer;
 
   void _assignTrainer(BuildContext context) {
+    Cliente? client = Provider.of<Session>(context, listen: false).client;
+
     if (!Provider.of<Session>(context, listen: false)
         .matchTrainers
         .contains(trainer)) {
-      Cliente? client = Provider.of<Session>(context, listen: false).client;
-
       Match match = Match(client!.id, trainer.id);
 
       MatchService.postMatch(match).then((value) {
@@ -41,7 +41,7 @@ class TrainerDetail extends StatelessWidget {
           ),
         );
 
-        Navigator.of(context).pushReplacementNamed(Chat.routeName,
+        Navigator.of(context).pushNamed(Chat.routeName,
             arguments: {...trainer.toJson(), 'clientId': client.id});
       }).onError((error, stackTrace) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -52,8 +52,8 @@ class TrainerDetail extends StatelessWidget {
         );
       });
     } else {
-      Navigator.of(context)
-          .pushReplacementNamed(Chat.routeName, arguments: trainer);
+      Navigator.of(context).pushNamed(Chat.routeName,
+          arguments: {...trainer.toJson(), 'clientId': client?.id});
     }
   }
 
@@ -94,17 +94,15 @@ class TrainerDetail extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           child: Column(
             children: [
-              const ColoredBox(
-                color: Colors.blue,
-                child: SizedBox(
-                  height: 240,
-                  width: double.infinity,
-                ),
+              CircleAvatar(
+                radius: (MediaQuery.of(context).size.width * 0.75) / 2,
+                child: Text('${trainer.nombres[0]}${trainer.apellidos[0]}',
+                    style: const TextStyle(fontSize: 48)),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 10),
                 child: Text(
-                  trainer.nombreMostrado,
+                  trainer.nombreMostrado.titleCase,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 24,
@@ -112,7 +110,10 @@ class TrainerDetail extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(trainer.descripcion),
+              Text(
+                trainer.descripcion.sentenceCase,
+                style: TextStyle(fontSize: 18),
+              ),
               ConstrainedBox(
                   constraints: BoxConstraints.tight(const Size(10, 10))),
               Row(
