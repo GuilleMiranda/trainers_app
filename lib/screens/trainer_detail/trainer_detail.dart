@@ -41,7 +41,7 @@ class TrainerDetail extends StatelessWidget {
           ),
         );
 
-        Navigator.of(context).pushNamed(Chat.routeName,
+        Navigator.of(context).pushReplacementNamed(Chat.routeName,
             arguments: {...trainer.toJson(), 'clientId': client.id});
       }).onError((error, stackTrace) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -52,7 +52,7 @@ class TrainerDetail extends StatelessWidget {
         );
       });
     } else {
-      Navigator.of(context).pushNamed(Chat.routeName,
+      Navigator.of(context).pushReplacementNamed(Chat.routeName,
           arguments: {...trainer.toJson(), 'clientId': client?.id});
     }
   }

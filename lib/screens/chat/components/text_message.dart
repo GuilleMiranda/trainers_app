@@ -27,7 +27,7 @@ class TextMessage extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context)
               .backgroundColor
-              .withOpacity('${clientId}' == message.senderId ? 1.0 : 0.5),
+              .withOpacity('$clientId' == message.senderId ? 1.0 : 0.5),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Column(
@@ -40,6 +40,7 @@ class TextMessage extends StatelessWidget {
                   ? TextAlign.end
                   : TextAlign.start,
               message.contenido,
+              style: const TextStyle(fontSize: 16),
             ),
             Text(
               prettyDate,
