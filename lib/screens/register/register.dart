@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trainers_app/model/cliente.dart';
-import 'package:trainers_app/screens/auth/auth.dart';
 import 'package:trainers_app/screens/preferences_register/preferences.dart';
 
 class Register extends StatelessWidget {
