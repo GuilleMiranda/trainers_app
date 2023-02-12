@@ -36,6 +36,7 @@ class _FavoritesState extends State<Favorites> {
 
   Widget _buildFavoriteList(Set<Entrenador> trainers) {
     return ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 8),
         itemCount: trainers.length,
         itemBuilder: (context, index) {
           return ListTile(

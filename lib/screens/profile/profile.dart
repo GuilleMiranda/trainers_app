@@ -58,9 +58,11 @@ class Profile extends StatelessWidget {
                 child: SizedBox(
                   child: Column(
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         minRadius: 100,
-                        child: Icon(Icons.account_circle),
+                        child: Text(
+                            '${session.client?.nombres[0]}${session.client?.apellidos[0]}',
+                            style: const TextStyle(fontSize: 48)),
                       ),
                       Text(
                         '${session.client?.nombreMostrado}'.titleCase,
@@ -71,7 +73,7 @@ class Profile extends StatelessWidget {
                 ),
               ),
               ..._clientData(session),
-              Center(
+              const Center(
                 child: TextButton(
                   onPressed: null,
                   child: Text('Cambiar contraseña'),

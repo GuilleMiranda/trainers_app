@@ -1,5 +1,5 @@
 abstract class EnvironmentConstants {
-  static const String ip = '192.168.100.124';
+  static const String ip = '192.168.0.16';
   static const String apiUrl = 'http://$ip:8080/api/v1/';
   static const String wsUrl = 'ws://$ip:80/chat';
 
