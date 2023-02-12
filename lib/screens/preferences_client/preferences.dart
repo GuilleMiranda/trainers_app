@@ -65,12 +65,14 @@ class _PreferencesClientState extends State<PreferencesClient> {
 
   Widget _buildPreference(BuildContext context, dynamic preferenceTypes) {
     List<Widget> preferences = [];
+    String distanceLabel;
 
     for (var preference in preferenceTypes) {
       if (preference['preferencia'] == 'DISTANCIA') {
         clientOptionId =
             client.getPreferencia(preference['preferencia'])!.valor;
         double doubleOption = clientOptionId.toDouble();
+        distanceLabel = clientOptionId.toString();
 
         preferences.add(Column(
           children: [
@@ -78,18 +80,28 @@ class _PreferencesClientState extends State<PreferencesClient> {
               _preferenceLabel(preference['preferencia']),
               style: Theme.of(context).textTheme.labelLarge,
             ),
-            Slider(
-              value: doubleOption,
-              min: 5,
-              max: 100,
-              divisions: 10,
-              onChanged: (option) {
-                setState(() {
-                  clientOptionId = option.floor();
-                  client.setPreferencia(
-                      preference['preferencia'], int.parse(option.toString()));
-                });
-              },
+            Row(
+              children: [
+                Text('${distanceLabel}km'),
+
+                Expanded(
+                  child: Slider(
+                    value: doubleOption,
+                    min: 5,
+                    max: 100,
+                    divisions: 10,
+                    label: distanceLabel,
+                    onChanged: (option) {
+                      setState(() {
+                        clientOptionId = option.round();
+                        distanceLabel = clientOptionId.toString();
+                        client.setPreferencia(
+                            preference['preferencia'], int.parse(clientOptionId.toString()));
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ));
