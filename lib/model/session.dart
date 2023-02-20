@@ -3,13 +3,24 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:trainers_app/model/cliente.dart';
 import 'package:trainers_app/model/entrenador.dart';
+import 'package:trainers_app/model/gender.dart';
 
 class Session extends ChangeNotifier {
   Cliente? client;
   double? latitude;
   double? longitude;
+
+  List<Gender> genders = [];
   List<Entrenador> matchTrainers = [];
   Set<Entrenador> favoriteTrainers = <Entrenador>{};
+
+  void setGenders(List<Gender> genders) {
+    genders = genders;
+  }
+
+  List<Gender> getGenders() {
+    return genders;
+  }
 
   void setLatitude(double latitude) {
     this.latitude = latitude;

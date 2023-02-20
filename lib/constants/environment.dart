@@ -1,5 +1,7 @@
+import '../model/gender.dart';
+
 abstract class EnvironmentConstants {
-  static const String ip = '192.168.0.16';
+  static const String ip = '10.10.10.173';
   static const String apiUrl = 'http://$ip:8080/api/v1/';
   static const String wsUrl = 'ws://$ip:80/chat';
 
@@ -10,6 +12,8 @@ abstract class EnvironmentConstants {
   static const Map<String, String> get_headers = {
     'Content-Type': 'application/json; charset=UTF-8',
   };
+
+  static List<Gender> genders = [];
 
   // Auth
   static const String post_autenticar_cliente = 'autenticar/cliente';
@@ -39,4 +43,7 @@ abstract class EnvironmentConstants {
   static const get_matches_cliente = 'matchesCliente';
   static const post_match = 'match';
   static const post_unmatch = 'unmatch';
+
+  // Generos
+  static const get_generos = 'generos';
 }

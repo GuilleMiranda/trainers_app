@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trainers_app/constants/environment.dart';
 import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/chat/chat.dart';
 import 'package:trainers_app/screens/messages/messages.dart';
@@ -9,11 +10,13 @@ import 'package:trainers_app/screens/preferences_register/preferences.dart';
 import 'package:trainers_app/screens/profile/profile.dart';
 import 'package:trainers_app/screens/register/register.dart';
 import 'package:trainers_app/screens/trainer_detail/trainer_detail.dart';
+import 'package:trainers_app/services/gender.service.dart';
 import './screens/auth/auth.dart';
 import './screens/favorites/favorites.dart';
 import './screens/home_screen/home_screen.dart';
 
 void main() {
+  GenderService.getGeneros().then((value) => EnvironmentConstants.genders = value);
   runApp(ChangeNotifierProvider(
     create: (context) => Session(),
     child: const Trainers(),
