@@ -31,6 +31,7 @@ class Trainers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      locale: const Locale('es', 'ES'),
       debugShowCheckedModeBanner: false,
       title: 'Trainers',
       theme: ThemeData(

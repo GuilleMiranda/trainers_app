@@ -59,7 +59,7 @@ class Register extends StatelessWidget {
                   controller: _nombreMostradoController,
                 ),
                 InputDatePickerFormField(
-                  firstDate: DateTime(1900, 1, 1),
+                  firstDate: DateTime(1920, 1, 1),
                   lastDate:
                       DateTime.now().subtract(const Duration(days: 365 * 12)),
                   onDateSaved: (datetime) => _fechaNacimiento = datetime,
@@ -68,7 +68,7 @@ class Register extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () => _register(context),
-                  child: const Text('Registrarse'),
+                  child: const Text('Comenzar'),
                 ),
               ],
             ),

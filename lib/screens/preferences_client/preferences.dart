@@ -24,18 +24,20 @@ class _PreferencesClientState extends State<PreferencesClient> {
   @override
   void initState() {
     _futurePreferences = QuestionService().fetchPreferences();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Preferencias'),
+          title: const
+          Text('Preferencias'),
         ),
         body: Consumer<Session>(builder: (context, session, child) {
           client = Cliente.copyOf(session.client!);
           return Container(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: FutureBuilder(
               future: _futurePreferences,
               builder: ((context, snapshot) => snapshot.hasData
@@ -83,7 +85,6 @@ class _PreferencesClientState extends State<PreferencesClient> {
             Row(
               children: [
                 Text('${distanceLabel}km'),
-
                 Expanded(
                   child: Slider(
                     value: doubleOption,
@@ -95,8 +96,8 @@ class _PreferencesClientState extends State<PreferencesClient> {
                       setState(() {
                         clientOptionId = option.round();
                         distanceLabel = clientOptionId.toString();
-                        client.setPreferencia(
-                            preference['preferencia'], int.parse(clientOptionId.toString()));
+                        client.setPreferencia(preference['preferencia'],
+                            int.parse(clientOptionId.toString()));
                       });
                     },
                   ),
@@ -105,7 +106,7 @@ class _PreferencesClientState extends State<PreferencesClient> {
             ),
           ],
         ));
-      }else {
+      } else {
         preferences.add(_buildTile(preference));
       }
     }
@@ -115,7 +116,7 @@ class _PreferencesClientState extends State<PreferencesClient> {
     );
   }
 
-  Widget _buildTile(dynamic preference) {
+  Widget _buildTile(dynamic preference) { 
     List<DropdownMenuItem<int>> items = [];
     for (dynamic option in preference['opciones']) {
       items.add(

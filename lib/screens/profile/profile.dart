@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/preferences_client/preferences.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   static const routeName = '/profile';
 
   const Profile({super.key});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  final ImagePicker _picker = ImagePicker();
 
   List<ListTile> _clientData(Session session) {
     var dataList = <ListTile>[
@@ -58,11 +66,21 @@ class Profile extends StatelessWidget {
                 child: SizedBox(
                   child: Column(
                     children: [
-                      CircleAvatar(
-                        minRadius: 100,
-                        child: Text(
-                            '${session.client?.nombres[0]}${session.client?.apellidos[0]}',
-                            style: const TextStyle(fontSize: 48)),
+                      GestureDetector(
+                        onTap: () async {
+                          var file = await _picker.pickImage(
+                              source: ImageSource.gallery);
+                          LostDataResponse response =
+                              await _picker.retrieveLostData();
+
+                          file?.readAsBytes().then((value) => print(value));
+                        },
+                        child: CircleAvatar(
+                          minRadius: 100,
+                          child: Text(
+                              '${session.client?.nombres[0]}${session.client?.apellidos[0]}',
+                              style: const TextStyle(fontSize: 48)),
+                        ),
                       ),
                       Text(
                         '${session.client?.nombreMostrado}'.titleCase,
