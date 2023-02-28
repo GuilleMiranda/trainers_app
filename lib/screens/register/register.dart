@@ -14,7 +14,7 @@ class Register extends StatelessWidget {
   final TextEditingController _nombreMostradoController =
       TextEditingController();
   late DateTime _fechaNacimiento = DateTime.now();
-  late int sexoBiologico = 0;
+  late int sexoBiologico = EnvironmentConstants.genders[0].genderId;
 
   final _formKey = GlobalKey<FormState>();
 

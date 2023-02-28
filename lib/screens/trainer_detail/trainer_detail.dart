@@ -8,7 +8,10 @@ import 'package:trainers_app/screens/chat/chat.dart';
 import 'package:trainers_app/screens/favorites/favorites.dart';
 import 'package:trainers_app/services/client.service.dart';
 import 'package:trainers_app/services/match.service.dart';
+import 'package:trainers_app/services/services.dart';
 
+import '../../constants/environment.dart';
+import '../../model/gender.dart';
 import '../../model/session.dart';
 
 class TrainerDetail extends StatelessWidget {
@@ -80,69 +83,113 @@ class TrainerDetail extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    trainer = ModalRoute.of(context)!.settings.arguments as Entrenador;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          trainer.nombreMostrado,
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            children: [
-              CircleAvatar(
-                radius: (MediaQuery.of(context).size.width * 0.75) / 2,
-                child: Text('${trainer.nombres[0]}${trainer.apellidos[0]}',
-                    style: const TextStyle(fontSize: 48)),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 10),
-                child: Text(
-                  trainer.nombreMostrado.titleCase,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+  Widget _buildParameters(parameters) {
+    return Column(
+      children: (parameters as List)
+          .map((p) => Row(
+                children: [
+                  Text(
+                    '${EnvironmentConstants.paramProfileText[p["parametro"]]}:'
+                            .sentenceCase +
+                        ' ',
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
+                  Text('${p["valorParametro"]}')
+                ],
+              ))
+          .toList(),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    Future<List<Map<String, dynamic>>> parameters =
+        TrainerService().fetchTrainerParams(trainer.id);
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: (MediaQuery.of(context).size.width * 0.75) / 2,
+              child: Text('${trainer.nombres[0]}${trainer.apellidos[0]}',
+                  style: const TextStyle(fontSize: 48)),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 10),
+              child: Text(
+                trainer.nombreMostrado.titleCase,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
-                trainer.descripcion.sentenceCase,
-                style: TextStyle(fontSize: 18),
-              ),
-              ConstrainedBox(
-                  constraints: BoxConstraints.tight(const Size(10, 10))),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => _addFavorite(context),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.favorite),
-                        Text('A favoritos'),
-                      ],
-                    ),
+            ),
+            Text(
+              trainer.descripcion.sentenceCase,
+              style: TextStyle(fontSize: 18),
+            ),
+            Divider(
+              thickness: 1,
+            ),
+            Row(
+              children: [
+                Text('Género: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(EnvironmentConstants.genders
+                    .firstWhere((element) => element.genderId == trainer.genero,
+                        orElse: () => Gender(10, 'Desconocido'))
+                    .text
+                    .sentenceCase)
+              ],
+            ),
+            FutureBuilder(
+                future: parameters,
+                builder: (context, snapshot) {
+                  return snapshot.hasData
+                      ? _buildParameters(snapshot.data)
+                      : const Center(child: CircularProgressIndicator());
+                }),
+            ConstrainedBox(
+                constraints: BoxConstraints.tight(const Size(10, 10))),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () => _addFavorite(context),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.favorite),
+                      Text('A favoritos'),
+                    ],
                   ),
-                  ElevatedButton(
-                    onPressed: () => _assignTrainer(context),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.handshake),
-                        Text('¡Entrenar!'),
-                      ],
-                    ),
+                ),
+                ElevatedButton(
+                  onPressed: () => _assignTrainer(context),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.handshake),
+                      Text('¡Entrenar!'),
+                    ],
                   ),
-                ],
-              )
-            ],
-          ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    trainer = ModalRoute.of(context)!.settings.arguments as Entrenador;
+
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            trainer.nombreMostrado,
+          ),
+        ),
+        body: _buildBody(context));
   }
 }

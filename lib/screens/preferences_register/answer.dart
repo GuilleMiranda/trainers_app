@@ -50,21 +50,28 @@ class _AnswerState extends State<Answer> {
     List<Widget> widgets = [];
 
     if (rango != null) {
-      return Slider(
-        label: '${_distance.floor()}km',
-        value: _distance,
-        min: 5,
-        max: 105,
-        divisions: 10,
-        onChanged: (option) {
-          setState(() {
-            _distance = option.floorToDouble();
-          });
-        },
-        onChangeEnd: (_) {
-          widget.questionHandler(
-              widget.question['pregunta'], _distance.floor());
-        },
+      return Row(
+        children: [
+          Text('${_distance.floor()}km'),
+          Flexible(
+            child: Slider(
+              label: '${_distance.floor()}km',
+              value: _distance,
+              min: 5,
+              max: 105,
+              divisions: 10,
+              onChanged: (option) {
+                setState(() {
+                  _distance = option.floorToDouble();
+                });
+              },
+              onChangeEnd: (_) {
+                widget.questionHandler(
+                    widget.question['pregunta'], _distance.floor());
+              },
+            ),
+          ),
+        ],
       );
     }
 

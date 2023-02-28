@@ -21,6 +21,22 @@ class TrainerService {
     }
   }
 
+  Future<List<Map<String, dynamic>>> fetchTrainerParams(id) async {
+    final response = await http.get(
+        Uri.parse('$uri${EnvironmentConstants.get_entrenador}/$id/parametros'),
+        headers: EnvironmentConstants.get_headers);
+    if (response.statusCode == 200) {
+      return (json.decode(response.body) as List)
+          .map((e) => {
+                'parametro': e['parametro'],
+                'valorParametro': e['valorParametro']
+              })
+          .toList();
+    } else {
+      throw Exception('Error al recuperar parámetros del entrenador');
+    }
+  }
+
   Future<List<Entrenador>> fetchCandidates(id, lat, lon) async {
     String uriWithParams;
     if (lat == null || lon == null) {
@@ -32,7 +48,7 @@ class TrainerService {
     final response = await http.get(Uri.parse(uriWithParams),
         headers: EnvironmentConstants.get_headers);
 
-    if (response.statusCode == 200) {
+    if (response.body.isNotEmpty && response.statusCode == 200) {
       return (json.decode(response.body) as List)
           .map((e) => Entrenador.fromJson(e))
           .toList();

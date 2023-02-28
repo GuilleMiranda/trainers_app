@@ -20,13 +20,13 @@ class _MessagesState extends State<Messages> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Mensajes'),
+          title: const Text('Mis entrenadores'),
         ),
         body: Consumer<Session>(
           builder: (context, session, child) {
             if (session.matchTrainers.isEmpty) {
               return const Center(
-                child: Text('Elegí a tu entrenador para verlo acá.'),
+                child: Text('Elegí a tu primer entrenador para verlo acá.'),
               );
             }
             return _buildMatchList(session.matchTrainers.reversed.toList());

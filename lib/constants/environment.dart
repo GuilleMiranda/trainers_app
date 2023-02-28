@@ -1,7 +1,7 @@
 import '../model/gender.dart';
 
 abstract class EnvironmentConstants {
-  static const String ip = '192.168.100.124';
+  static const String ip = '192.168.0.12';
   static const String apiUrl = 'http://$ip:8080/api/v1/';
   static const String wsUrl = 'ws://$ip:80/chat';
 
@@ -14,6 +14,17 @@ abstract class EnvironmentConstants {
   };
 
   static List<Gender> genders = [];
+  static Map<String, String> paramProfileText = {
+    'CONDICION_SALUD': 'Acepta condiciones de salud especiales',
+    'DEPORTE': 'Deporte principal',
+    'EXPERIENCIA_DISCIPLINA': 'Años en la disciplina',
+    'HORARIO': 'Horario preferido',
+    'LOCALIZACION': 'Entrena principalmente en',
+    'MODALIDAD': 'Entrena principalemte de forma',
+    'OBJETIVO': 'Trabaja principalmente para'
+  };
+
+  //static List<Map<String, dynamic>> questions;
 
   // Auth
   static const String post_autenticar_cliente = 'autenticar/cliente';

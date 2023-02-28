@@ -111,8 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () => _favorites(context),
           ),
           ListTile(
-            leading: const Icon(Icons.message),
-            title: const Text('Mensajes'),
+            leading: const Icon(Icons.sports_handball_rounded),
+            title: const Text('Mis entrenadores'),
             onTap: () => _messages(context),
           ),
           ListTile(

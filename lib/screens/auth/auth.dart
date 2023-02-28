@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:trainers_app/constants/environment.dart';
 import 'package:trainers_app/model/cliente.dart';
 import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/register/register.dart';
@@ -107,7 +108,7 @@ class _AuthState extends State<Auth> {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 backgroundColor: Theme.of(context).errorColor,
                 content: const Text(
-                    'El correo ya está registrado. Intentá cambiar la contraseña.')));
+                    'El correo ya está registrado. Intentá con otro.')));
           }
         }).onError((error, stackTrace) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
