@@ -94,7 +94,7 @@ class TrainerDetail extends StatelessWidget {
                         ' ',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text('${p["valorParametro"]}')
+                  Text('${p["textoParametro"]}')
                 ],
               ))
           .toList(),
@@ -110,7 +110,7 @@ class TrainerDetail extends StatelessWidget {
         child: Column(
           children: [
             CircleAvatar(
-              radius: (MediaQuery.of(context).size.width * 0.75) / 2,
+              radius: (MediaQuery.of(context).size.width * 0.60) / 2,
               child: Text('${trainer.nombres[0]}${trainer.apellidos[0]}',
                   style: const TextStyle(fontSize: 48)),
             ),
@@ -137,7 +137,7 @@ class TrainerDetail extends StatelessWidget {
                 Text('Género: ', style: TextStyle(fontWeight: FontWeight.bold)),
                 Text(EnvironmentConstants.genders
                     .firstWhere((element) => element.genderId == trainer.genero,
-                        orElse: () => Gender(10, 'Desconocido'))
+                        orElse: () => const Gender(10, 'Desconocido', 'Genero'))
                     .text
                     .sentenceCase)
               ],

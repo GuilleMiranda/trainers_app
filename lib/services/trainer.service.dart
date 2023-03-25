@@ -29,7 +29,8 @@ class TrainerService {
       return (json.decode(response.body) as List)
           .map((e) => {
                 'parametro': e['parametro'],
-                'valorParametro': e['valorParametro']
+                'valorParametro': e['valorParametro'],
+                'textoParametro': e['textoParametro']
               })
           .toList();
     } else {

@@ -36,11 +36,22 @@ class Register extends StatelessWidget {
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Nombres'),
                   controller: _nombresController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Debe ingresar un nombre.';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'Apellidos'),
-                  controller: _apellidosController,
-                ),
+                    decoration: const InputDecoration(labelText: 'Apellidos'),
+                    controller: _apellidosController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Debe ingresar un apellido.';
+                      }
+                      return null;
+                    }),
                 DropdownButtonFormField(
                   decoration:
                       const InputDecoration(labelText: "Sexo biológico"),
@@ -57,18 +68,25 @@ class Register extends StatelessWidget {
                   decoration:
                       const InputDecoration(labelText: 'Nombre mostrado'),
                   controller: _nombreMostradoController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Debe ingresar un nombre a ser mostrado.';
+                      }
+                      return null;
+                    }
                 ),
                 InputDatePickerFormField(
                   firstDate: DateTime(1920, 1, 1),
                   lastDate:
                       DateTime.now().subtract(const Duration(days: 365 * 12)),
                   onDateSaved: (datetime) => _fechaNacimiento = datetime,
+                  errorFormatText: 'Ingrese una fécha válida en formato MES/DÍA/AÑO',
                   fieldLabelText: 'Fecha de nacimiento',
                   errorInvalidText: 'Fuera del rango',
                 ),
                 ElevatedButton(
                   onPressed: () => _register(context),
-                  child: const Text('Comenzar'),
+                  child: const Text('Continuar'),
                 ),
               ],
             ),
@@ -82,6 +100,7 @@ class Register extends StatelessWidget {
     _formKey.currentState?.save();
     if (_formKey.currentState!.validate()) {
       cliente.nombres = _nombresController.text;
+
       cliente.apellidos = _apellidosController.text;
       cliente.nombreMostrado = _nombreMostradoController.text;
       cliente.fechaNacimiento = DateTime(

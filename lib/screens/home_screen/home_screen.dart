@@ -66,11 +66,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (BuildContext context,
                         AsyncSnapshot<List<Entrenador>> snapshot) =>
                     snapshot.hasData
-                        ? ListView.builder(
-                            itemCount: snapshot.data?.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return TrainerTile(snapshot.data![index]);
-                            })
+                        ? snapshot.data!.isEmpty
+                            ? const Center(
+                                child: Text(
+                                    'No hay entrenadores con tus preferenicas. Probá cambiando algunas de ellas.'),
+                              )
+                            : ListView.builder(
+                                itemCount: snapshot.data?.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return TrainerTile(snapshot.data![index]);
+                                })
                         : const Center(
                             child: CircularProgressIndicator(),
                           ),

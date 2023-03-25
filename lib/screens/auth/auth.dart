@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:trainers_app/constants/environment.dart';
 import 'package:trainers_app/model/cliente.dart';
 import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/register/register.dart';
@@ -91,6 +90,7 @@ class _AuthState extends State<Auth> {
           }
         }).onError((error, stackTrace) {
           _emailController.clear();
+
           _passwordController.clear();
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               backgroundColor: Colors.red,
@@ -219,7 +219,7 @@ class _AuthState extends State<Auth> {
               ElevatedButton(
                 onPressed: () => _authorize(context),
                 child: Text(
-                    _authMode == AuthMode.Login ? "Ingresar" : "Registrarse"),
+                    _authMode == AuthMode.Login ? "Ingresar" : "Comenzar registro"),
               ),
               TextButton(
                 onPressed: _toggleAuthMode,
