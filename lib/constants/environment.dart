@@ -57,4 +57,8 @@ abstract class EnvironmentConstants {
 
   // Generos
   static const get_generos = 'generos';
+
+  // Imagen
+  static const get_imagen = 'imagen';
+  static const post_imagen = 'imagen';
 }

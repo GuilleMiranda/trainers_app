@@ -9,10 +9,19 @@ class Session extends ChangeNotifier {
   Cliente? client;
   double? latitude;
   double? longitude;
+  String? profilePicture;
 
   List<Gender> genders = [];
   List<Entrenador> matchTrainers = [];
   Set<Entrenador> favoriteTrainers = <Entrenador>{};
+
+  void setProfilePicture(String base64) {
+    profilePicture = base64;
+  }
+
+  String? getProfilePicture() {
+    return profilePicture;
+  }
 
   void setGenders(List<Gender> genders) {
     genders = genders;
@@ -71,6 +80,9 @@ class Session extends ChangeNotifier {
 
   void remove() {
     client = null;
+    latitude = null;
+    longitude = null;
+    profilePicture = null;
     favoriteTrainers = <Entrenador>{};
     matchTrainers = [];
     notifyListeners();
