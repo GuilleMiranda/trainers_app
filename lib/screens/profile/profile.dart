@@ -79,15 +79,10 @@ class _ProfileState extends State<Profile> {
                         onTap: () async {
                           var file = await _picker.pickImage(
                               source: ImageSource.gallery);
-                          LostDataResponse response =
-                              await _picker.retrieveLostData();
                           final bytes = await file?.readAsBytes();
                           final base64Img = base64Encode(bytes!);
 
-                          image.userId = session.client!.id;
                           image.base64 = base64Img;
-                          image.imageType = 'FOTO_PERFIL';
-                          image.userType = 'CLIENTE';
 
                           await ImageService.postImage(image);
 
@@ -97,7 +92,7 @@ class _ProfileState extends State<Profile> {
                             session.profilePicture = base64Img;
                           });
                         },
-                        child: session.getProfilePicture() != null
+                        child: session.profilePicture != null
                             ? CircleAvatar(
                                 maxRadius: 100,
                                 child: ClipOval(
@@ -114,11 +109,11 @@ class _ProfileState extends State<Profile> {
                                       maxRadius: 100,
                                       child: ClipOval(
                                         child: Image.memory(base64Decode(
-                                            (snapshot.data as Imagen.Image).base64)),
+                                            (snapshot.data as Imagen.Image)
+                                                .base64)),
                                       ),
                                     );
                                   }
-
                                   return CircleAvatar(
                                     maxRadius: 100,
                                     child: Text(
