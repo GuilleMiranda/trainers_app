@@ -128,13 +128,13 @@ class _ChatState extends State<Chat> {
 
       var utcDate = DateTime.now();
 
-      send.fecha = DateFormat("yyyy-MM-ddTHH:mm:ss-03:00").format(utcDate);
+      send.fecha = DateFormat("yyyy-MM-ddTHH:mm:ss-04:00").format(utcDate);
 
       print(jsonEncode(send.toJson()));
       _channel.sink.add(jsonEncode(send.toJson()));
 
       var offset = DateTime.now().timeZoneOffset;
-      send.fecha = DateFormat("yyyy-MM-ddTHH:mm:ss-03:00").format(utcDate.add(offset));
+      send.fecha = DateFormat("yyyy-MM-ddTHH:mm:ss-04:00").format(utcDate.add(offset));
 
       setState(() => _messageList.insert(0, send));
       messageController.clear();

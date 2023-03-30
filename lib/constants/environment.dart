@@ -1,7 +1,7 @@
 import '../model/gender.dart';
 
 abstract class EnvironmentConstants {
-  static const String ip = '192.168.15.40';
+  static const String ip = '192.168.0.16';
   static const String apiUrl = 'http://$ip:8080/api/v1/';
   static const String wsUrl = 'ws://$ip:80/chat';
 
@@ -19,7 +19,7 @@ abstract class EnvironmentConstants {
     'DEPORTE': 'Deporte principal',
     'EXPERIENCIA_DISCIPLINA': 'Años en la disciplina',
     'HORARIO': 'Horario preferido',
-    'LOCALIZACION': 'Entrena principalmente en',
+    'LOCALIZACION': 'El lugar en el que entrena es',
     'MODALIDAD': 'Entrena principalemte de forma',
     'OBJETIVO': 'Trabaja principalmente para'
   };
