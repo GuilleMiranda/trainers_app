@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
@@ -5,6 +7,9 @@ import 'package:recase/recase.dart';
 import 'package:trainers_app/model/entrenador.dart';
 import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/chat/chat.dart';
+
+import '../../services/image.service.dart';
+import '../../model/Image.dart' as Imagen;
 
 class Messages extends StatefulWidget {
   static const routeName = '/messages';
@@ -20,13 +25,13 @@ class _MessagesState extends State<Messages> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Mensajes'),
+          title: const Text('Mis entrenadores'),
         ),
         body: Consumer<Session>(
           builder: (context, session, child) {
             if (session.matchTrainers.isEmpty) {
               return const Center(
-                child: Text('Elegí a tu entrenador para verlo acá.'),
+                child: Text('Elegí a tu primer entrenador para verlo acá.'),
               );
             }
             return _buildMatchList(session.matchTrainers.reversed.toList());
@@ -39,16 +44,32 @@ class _MessagesState extends State<Messages> {
         padding: const EdgeInsets.symmetric(vertical: 8),
         itemCount: trainers.length,
         itemBuilder: (context, index) {
+          Imagen.Image image = Imagen.Image.newImage();
+          image.userId = trainers.elementAt(index).id;
+          image.imageType = 'FOTO_PERFIL';
+          image.userType = 'ENTRENADOR';
           return ListTile(
             leading: SizedBox(
               width: 52,
-              child: CircleAvatar(
-                radius: 52,
-                child: CircleAvatar(
-                  radius: 52,
-                  child: Text(
-                      '${trainers.elementAt(index).nombres[0]}${trainers.elementAt(index).apellidos[0]}'),
-                ),
+              child: FutureBuilder(
+                future: ImageService.getImage(image),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data != null) {
+                    return CircleAvatar(
+                      maxRadius: 100,
+                      child: ClipOval(
+                        child: Image.memory(base64Decode(
+                            (snapshot.data as Imagen.Image).base64)),
+                      ),
+                    );
+                  }
+
+                  return CircleAvatar(
+                    radius: 52,
+                    child: Text(
+                        '${trainers.elementAt(index).nombres[0]}${trainers.elementAt(index).apellidos[0]}'),
+                  );
+                },
               ),
             ),
             title: Text(

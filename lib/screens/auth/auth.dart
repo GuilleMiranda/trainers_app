@@ -90,6 +90,7 @@ class _AuthState extends State<Auth> {
           }
         }).onError((error, stackTrace) {
           _emailController.clear();
+
           _passwordController.clear();
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               backgroundColor: Colors.red,
@@ -107,7 +108,7 @@ class _AuthState extends State<Auth> {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 backgroundColor: Theme.of(context).errorColor,
                 content: const Text(
-                    'El correo ya está registrado. Intentá cambiar la contraseña.')));
+                    'El correo ya está registrado. Intentá con otro.')));
           }
         }).onError((error, stackTrace) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -218,7 +219,7 @@ class _AuthState extends State<Auth> {
               ElevatedButton(
                 onPressed: () => _authorize(context),
                 child: Text(
-                    _authMode == AuthMode.Login ? "Ingresar" : "Registrarse"),
+                    _authMode == AuthMode.Login ? "Ingresar" : "Comenzar registro"),
               ),
               TextButton(
                 onPressed: _toggleAuthMode,

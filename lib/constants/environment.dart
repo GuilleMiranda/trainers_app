@@ -1,3 +1,5 @@
+import '../model/gender.dart';
+
 abstract class EnvironmentConstants {
   static const String ip = '192.168.0.16';
   static const String apiUrl = 'http://$ip:8080/api/v1/';
@@ -10,6 +12,19 @@ abstract class EnvironmentConstants {
   static const Map<String, String> get_headers = {
     'Content-Type': 'application/json; charset=UTF-8',
   };
+
+  static List<Gender> genders = [];
+  static Map<String, String> paramProfileText = {
+    'CONDICION_SALUD': 'Acepta condiciones de salud especiales',
+    'DEPORTE': 'Deporte principal',
+    'EXPERIENCIA_DISCIPLINA': 'Años en la disciplina',
+    'HORARIO': 'Horario preferido',
+    'LOCALIZACION': 'El lugar en el que entrena es',
+    'MODALIDAD': 'Entrena principalemte de forma',
+    'OBJETIVO': 'Trabaja principalmente para'
+  };
+
+  //static List<Map<String, dynamic>> questions;
 
   // Auth
   static const String post_autenticar_cliente = 'autenticar/cliente';
@@ -39,4 +54,11 @@ abstract class EnvironmentConstants {
   static const get_matches_cliente = 'matchesCliente';
   static const post_match = 'match';
   static const post_unmatch = 'unmatch';
+
+  // Generos
+  static const get_generos = 'generos';
+
+  // Imagen
+  static const get_imagen = 'imagen';
+  static const post_imagen = 'imagen';
 }

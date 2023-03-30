@@ -83,7 +83,8 @@ class _PreferencesRegisterState extends State<PreferencesRegister> {
               });
             }
           },
-          child: const Text('Siguiente'),
+          child: Text(
+              (_questionIndex == length! - 1) ? 'Registrarse' : 'Siguiente'),
         ),
       ],
     );

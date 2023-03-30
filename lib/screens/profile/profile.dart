@@ -1,13 +1,26 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 import 'package:trainers_app/model/session.dart';
 import 'package:trainers_app/screens/preferences_client/preferences.dart';
+import 'package:trainers_app/services/image.service.dart';
+import '../../model/Image.dart' as Imagen;
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   static const routeName = '/profile';
 
   const Profile({super.key});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  final ImagePicker _picker = ImagePicker();
+  late Imagen.Image image = Imagen.Image.newImage();
 
   List<ListTile> _clientData(Session session) {
     var dataList = <ListTile>[
@@ -51,18 +64,64 @@ class Profile extends StatelessWidget {
   Widget _buildCard(BuildContext context) {
     return Consumer<Session>(
       builder: (context, session, child) {
+        image.userId = session.client!.id;
+        image.imageType = 'FOTO_PERFIL';
+        image.userType = 'CLIENTE';
         return SingleChildScrollView(
           child: Column(
             children: [
               Card(
                 child: SizedBox(
+                  width: double.maxFinite,
                   child: Column(
                     children: [
-                      CircleAvatar(
-                        minRadius: 100,
-                        child: Text(
-                            '${session.client?.nombres[0]}${session.client?.apellidos[0]}',
-                            style: const TextStyle(fontSize: 48)),
+                      GestureDetector(
+                        onTap: () async {
+                          var file = await _picker.pickImage(
+                              source: ImageSource.gallery);
+                          final bytes = await file?.readAsBytes();
+                          final base64Img = base64Encode(bytes!);
+
+                          image.base64 = base64Img;
+
+                          await ImageService.postImage(image);
+
+                          setState(() {
+                            Provider.of<Session>(context, listen: false)
+                                .setProfilePicture(base64Img);
+                            session.profilePicture = base64Img;
+                          });
+                        },
+                        child: session.profilePicture != null
+                            ? CircleAvatar(
+                                maxRadius: 100,
+                                child: ClipOval(
+                                  child: Image.memory(
+                                      base64Decode(session.profilePicture!)),
+                                ),
+                              )
+                            : FutureBuilder(
+                                future: ImageService.getImage(image),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData &&
+                                      snapshot.data != null) {
+                                    return CircleAvatar(
+                                      maxRadius: 100,
+                                      child: ClipOval(
+                                        child: Image.memory(base64Decode(
+                                            (snapshot.data as Imagen.Image)
+                                                .base64)),
+                                      ),
+                                    );
+                                  }
+                                  return CircleAvatar(
+                                    maxRadius: 100,
+                                    child: Text(
+                                        '${session.client?.nombres[0]}${session.client?.apellidos[0]}',
+                                        style: const TextStyle(fontSize: 48)),
+                                  );
+                                },
+                              ),
                       ),
                       Text(
                         '${session.client?.nombreMostrado}'.titleCase,

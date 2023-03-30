@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trainers_app/constants/environment.dart';
 import 'package:trainers_app/model/cliente.dart';
 import 'package:trainers_app/screens/preferences_register/preferences.dart';
 
@@ -13,7 +14,7 @@ class Register extends StatelessWidget {
   final TextEditingController _nombreMostradoController =
       TextEditingController();
   late DateTime _fechaNacimiento = DateTime.now();
-  late int sexoBiologico = 0;
+  late int sexoBiologico = EnvironmentConstants.genders[0].genderId;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -30,60 +31,64 @@ class Register extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Form(
             key: _formKey,
-            child: Container(
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: 'Nombres'),
-                    controller: _nombresController,
-                  ),
-                  TextFormField(
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Nombres'),
+                  controller: _nombresController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Debe ingresar un nombre.';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
                     decoration: const InputDecoration(labelText: 'Apellidos'),
                     controller: _apellidosController,
-                  ),
-                  DropdownButtonFormField(
-                    decoration:
-                        const InputDecoration(labelText: "Sexo biológico"),
-                    value: 0,
-                    items: const [
-                      DropdownMenuItem(
-                        child: Text("Femenino"),
-                        value: 0,
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Masculino"),
-                        value: 1,
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Otros"),
-                        value: 2,
-                      ),
-                      DropdownMenuItem(
-                        child: Text("Prefiero no decirlo"),
-                        value: 3,
-                      )
-                    ],
-                    onChanged: (value) => sexoBiologico = value as int,
-                  ),
-                  TextFormField(
-                    decoration:
-                        const InputDecoration(labelText: 'Nombre mostrado'),
-                    controller: _nombreMostradoController,
-                  ),
-                  InputDatePickerFormField(
-                    firstDate: DateTime(1900, 1, 1),
-                    lastDate:
-                        DateTime.now().subtract(const Duration(days: 365 * 12)),
-                    onDateSaved: (datetime) => _fechaNacimiento = datetime,
-                    fieldLabelText: 'Fecha de nacimiento',
-                    errorInvalidText: 'Fuera del rango',
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _register(context),
-                    child: const Text('Registrarse'),
-                  ),
-                ],
-              ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Debe ingresar un apellido.';
+                      }
+                      return null;
+                    }),
+                DropdownButtonFormField(
+                  decoration:
+                      const InputDecoration(labelText: "Sexo biológico"),
+                  value: 0,
+                  items: EnvironmentConstants.genders.map((e) {
+                    return DropdownMenuItem(
+                        value: EnvironmentConstants.genders.indexOf(e),
+                        child: Text(e.text));
+                  }).toList(),
+                  onChanged: (value) => sexoBiologico =
+                      EnvironmentConstants.genders[value as int].genderId,
+                ),
+                TextFormField(
+                  decoration:
+                      const InputDecoration(labelText: 'Nombre mostrado'),
+                  controller: _nombreMostradoController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Debe ingresar un nombre a ser mostrado.';
+                      }
+                      return null;
+                    }
+                ),
+                InputDatePickerFormField(
+                  firstDate: DateTime(1920, 1, 1),
+                  lastDate:
+                      DateTime.now().subtract(const Duration(days: 365 * 12)),
+                  onDateSaved: (datetime) => _fechaNacimiento = datetime,
+                  errorFormatText: 'Ingrese una fécha válida en formato MES/DÍA/AÑO',
+                  fieldLabelText: 'Fecha de nacimiento',
+                  errorInvalidText: 'Fuera del rango',
+                ),
+                ElevatedButton(
+                  onPressed: () => _register(context),
+                  child: const Text('Continuar'),
+                ),
+              ],
             ),
           ),
         ),
@@ -95,6 +100,7 @@ class Register extends StatelessWidget {
     _formKey.currentState?.save();
     if (_formKey.currentState!.validate()) {
       cliente.nombres = _nombresController.text;
+
       cliente.apellidos = _apellidosController.text;
       cliente.nombreMostrado = _nombreMostradoController.text;
       cliente.fechaNacimiento = DateTime(
